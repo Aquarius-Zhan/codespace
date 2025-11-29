@@ -1,0 +1,33 @@
+{
+"version": "0.2.0",
+"configurations": [
+{
+"name": "(gdb) Launch C++ Debug",
+"type": "cppdbg",
+"request": "launch",
+"program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+"args": [],
+"stopAtEntry": false,
+"cwd": "${fileDirname}",
+"environment": [],
+"externalConsole": true, // 推荐true，程序会运行在独立的cmd窗口，输入输出更方便
+"MIMode": "gdb",
+// 关键：必须替换成你自己的 gdb.exe 的完整地址！
+"miDebuggerPath": "D:\\mingw64\\bin\\gdb.exe",// gdb.exe在mingw64/bin目录下,同样的办法右键复制地址即
+"setupCommands": [
+{
+"description": "Enable pretty-printing for gdb",
+"text": "-enable-pretty-printing",
+"ignoreFailures": true
+},
+{
+"description": "Set Disassembly Flavor to Intel",
+"text": "-gdb-set disassembly-flavor intel",
+"ignoreFailures": true
+}
+],
+// 关键：在启动调试前，自动执行 tasks.json 中定义的构建任务
+"preLaunchTask": "C/C++: g++.exe build active file"
+}
+]
+}
