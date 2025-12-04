@@ -1,0 +1,16 @@
+{
+  "name": "wxprgrm",
+  "version": "1.0.0",
+  "description": "这是一个专为老年人设计的微信小程序，集成了菜品识别、药物识别、联系聊天和闹钟提醒等功能，旨在帮助老年人更好地管理健康生活和与家人保持联系。",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@vant/weapp": "^1.11.7"
+  }
+}

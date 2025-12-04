@@ -1,0 +1,265 @@
+/* pages/alarms/add-alarm.wxss */
+
+.container {
+  padding: 30rpx;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--primary-color, #1976D2);
+  display: block;
+}
+
+.form-container {
+  margin-bottom: 50rpx;
+}
+
+.form-item {
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25rpx;
+}
+
+.label-icon {
+  font-size: 32rpx;
+  margin-right: 15rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.label-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary, #212121);
+}
+
+/* 选择器样式 */
+.time-selector,
+.repeat-selector,
+.medicine-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  background: rgba(25, 118, 210, 0.05);
+  border-radius: 15rpx;
+  border: 2rpx solid rgba(25, 118, 210, 0.2);
+  transition: all 0.3s ease;
+}
+
+.time-selector:active,
+.repeat-selector:active,
+.medicine-selector:active {
+  background: rgba(25, 118, 210, 0.1);
+  transform: scale(0.98);
+}
+
+.time-text,
+.repeat-text,
+.medicine-text {
+  font-size: 36rpx;
+  color: var(--text-primary, #212121);
+  font-weight: 500;
+  flex: 1;
+}
+
+.arrow-icon {
+  font-size: 40rpx;
+  color: var(--text-secondary, #757575);
+  font-weight: bold;
+}
+
+/* 备注输入框 */
+.note-input-container {
+  padding: 30rpx;
+  background: rgba(25, 118, 210, 0.05);
+  border-radius: 15rpx;
+  border: 2rpx solid rgba(25, 118, 210, 0.2);
+}
+
+.note-input {
+  font-size: 32rpx;
+  color: var(--text-primary, #212121);
+  width: 100%;
+}
+
+/* 按钮区域 */
+.action-area {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+  padding: 20rpx 0;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, var(--primary-color, #1976D2) 0%, #1565C0 100%);
+  border-radius: 25rpx;
+  padding: 40rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 30rpx rgba(25, 118, 210, 0.4);
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.save-btn-hover {
+  transform: scale(0.95);
+  box-shadow: 0 4rpx 20rpx rgba(25, 118, 210, 0.6);
+}
+
+.save-btn-text {
+  color: white;
+  font-size: 40rpx;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.cancel-btn {
+  background: linear-gradient(135deg, var(--error-color, #F44336) 0%, #D32F2F 100%);
+  border-radius: 25rpx;
+  padding: 35rpx;
+  text-align: center;
+  box-shadow: 0 6rpx 25rpx rgba(244, 67, 54, 0.3);
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.cancel-btn-hover {
+  transform: scale(0.95);
+  box-shadow: 0 3rpx 15rpx rgba(244, 67, 54, 0.5);
+}
+
+.cancel-btn-text {
+  color: white;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 弹窗样式 */
+.picker-header {
+  padding: 40rpx 30rpx 30rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.picker-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary, #212121);
+  text-align: center;
+  display: block;
+}
+
+/* 重复频率选项 */
+.repeat-options {
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.repeat-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.repeat-option.checked {
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.option-text {
+  font-size: 34rpx;
+  color: var(--text-primary, #212121);
+  flex: 1;
+}
+
+.check-icon {
+  font-size: 36rpx;
+  color: var(--primary-color, #1976D2);
+  font-weight: bold;
+  margin-left: 20rpx;
+}
+
+/* 药品选项 */
+.medicine-list {
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.medicine-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.medicine-option.checked {
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.medicine-info {
+  flex: 1;
+}
+
+.medicine-name {
+  font-size: 34rpx;
+  color: var(--text-primary, #212121);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.medicine-dosage {
+  font-size: 28rpx;
+  color: var(--text-secondary, #757575);
+  display: block;
+}
+
+/* 弹窗操作按钮 */
+.picker-actions {
+  display: flex;
+  border-top: 1rpx solid #e0e0e0;
+  background: white;
+}
+
+.picker-btn {
+  flex: 1;
+  padding: 35rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.picker-btn.cancel {
+  color: var(--text-secondary, #757575);
+  border-right: 1rpx solid #e0e0e0;
+}
+
+.picker-btn.confirm {
+  color: var(--primary-color, #1976D2);
+  font-weight: bold;
+}
+
+.picker-btn:active {
+  background: rgba(0, 0, 0, 0.05);
+}

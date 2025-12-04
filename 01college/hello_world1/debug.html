@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Hello, Rogue World!</title>
+</head>
+<body>
+    <h1>Game Debug</h1>
+    <div id="console-output" style="border: 1px solid #000; padding: 10px; height: 300px; overflow-y: scroll; background: #f0f0f0; font-family: monospace;"></div>
+
+    <script>
+        // Override console.log to show on page
+        const originalLog = console.log;
+        const consoleDiv = document.getElementById('console-output');
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.map(arg =>
+                typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+            ).join(' ');
+            consoleDiv.innerHTML += '<div style="margin: 2px 0;">' + message + '</div>';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+
+        console.error = function(...args) {
+            console.log('ERROR:', ...args);
+        };
+    </script>
+
+    <!-- Kaboom.js -->
+    <script src="https://unpkg.com/kaboom@3000.1.0/dist/kaboom.js"></script>
+
+    <script>
+        console.log('Starting debug script...');
+
+        // Test Kaboom
+        console.log('Kaboom loaded:', typeof kaboom !== 'undefined');
+
+        if (typeof kaboom !== 'undefined') {
+            console.log('Initializing Kaboom...');
+
+            try {
+                // Initialize Kaboom with minimal settings
+                const k = kaboom({
+                    width: 800,
+                    height: 600,
+                    background: [0, 0, 0],
+                    debug: false
+                });
+
+                console.log('Kaboom initialized successfully');
+
+                // Test basic game object
+                scene('test', () => {
+                    console.log('Test scene created');
+
+                    // Add a simple object
+                    add([
+                        rect(50, 50),
+                        pos(100, 100),
+                        color(255, 0, 0)
+                    ]);
+
+                    console.log('Test object added');
+                });
+
+                // Start the test scene
+                scene('test');
+                console.log('Test scene started');
+
+            } catch (error) {
+                console.error('Error initializing Kaboom:', error);
+            }
+        } else {
+            console.error('Kaboom failed to load');
+        }
+    </script>
+
+    <!-- Load game scripts one by one with error checking -->
+    <script>
+        function loadScript(src, callback) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => callback(null, true);
+            script.onerror = () => callback(new Error('Failed to load: ' + src), false);
+            document.head.appendChild(script);
+        }
+
+        const scripts = [
+            'src/game.js',
+            'src/entities/Player.js',
+            'src/entities/Enemy.js',
+            'src/systems/LevelGenerator.js',
+            'src/systems/TrapSystem.js',
+            'src/ui/GameUI.js',
+            'src/scenes/MainScene.js'
+        ];
+
+        function loadNextScript(index) {
+            if (index >= scripts.length) {
+                console.log('All scripts loaded');
+                return;
+            }
+
+            console.log('Loading:', scripts[index]);
+            loadScript(scripts[index], (error, success) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log('✓ Loaded:', scripts[index]);
+                }
+                loadNextScript(index + 1);
+            });
+        }
+
+        // Start loading scripts
+        setTimeout(() => {
+            console.log('Starting to load game scripts...');
+            loadNextScript(0);
+        }, 1000);
+    </script>
+</body>
+</html>

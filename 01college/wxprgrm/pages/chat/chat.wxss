@@ -1,0 +1,464 @@
+/* pages/chat/chat.wxss */
+/* 聊天联系人列表页面样式 - 老年人友好型设计 */
+
+.container {
+  background-color: var(--background-secondary);
+  min-height: 100vh;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background-color: var(--background-primary);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--background-secondary);
+  border-radius: 50rpx;
+  padding: 20rpx 30rpx;
+  margin-right: 20rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 32rpx;
+  margin-left: 20rpx;
+  color: var(--text-primary);
+}
+
+.add-contact {
+  width: 88rpx;
+  height: 88rpx;
+  background: linear-gradient(135deg, var(--primary-color), #1565C0);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(25, 118, 210, 0.3);
+}
+
+.add-contact:active {
+  transform: scale(0.95);
+}
+
+/* 快速联系人 */
+.quick-contacts {
+  padding: 0 30rpx 20rpx;
+  background-color: var(--background-primary);
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+}
+
+.contact-count {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-left: 16rpx;
+  font-weight: normal;
+}
+
+.quick-contact-list {
+  white-space: nowrap;
+  padding: 10rpx 0;
+}
+
+.quick-contact-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 50rpx;
+  position: relative;
+}
+
+.quick-contact-item:last-child {
+  margin-right: 0;
+}
+
+.quick-contact-avatar-container {
+  position: relative;
+  margin-bottom: 16rpx;
+}
+
+.quick-contact-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(25, 118, 210, 0.1);
+}
+
+.quick-contact-name {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 联系人列表 */
+.contacts-container {
+  padding: 0 30rpx;
+}
+
+.search-result-tip {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+.contacts-list {
+  height: calc(100vh - 300rpx);
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--background-primary);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.contact-item:active {
+  transform: translateY(2rpx);
+  background-color: rgba(25, 118, 210, 0.02);
+}
+
+.contact-avatar-container {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.contact-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(25, 118, 210, 0.1);
+}
+
+.contact-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.contact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.contact-time {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.contact-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-relation {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  background-color: var(--background-secondary);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  max-width: 160rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.last-message {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  max-width: 300rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 紧急联系人标识 */
+.emergency-badge {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background-color: var(--background-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(244, 67, 54, 0.3);
+}
+
+/* 在线状态 */
+.online-status {
+  position: absolute;
+  bottom: 8rpx;
+  left: 112rpx;
+  width: 24rpx;
+  height: 24rpx;
+  background-color: var(--background-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx solid white;
+}
+
+.online-dot {
+  width: 16rpx;
+  height: 16rpx;
+  background-color: var(--success-color);
+  border-radius: 50%;
+}
+
+/* 加载状态 */
+.load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+}
+
+.load-more van-loading {
+  margin-right: 20rpx;
+}
+
+.no-more {
+  text-align: center;
+  padding: 40rpx;
+  color: var(--text-secondary);
+  font-size: 26rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  margin-bottom: 40rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: var(--text-secondary);
+  margin-bottom: 60rpx;
+}
+
+.empty-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+/* 浮动按钮 */
+.voice-input-btn,
+.emergency-call-btn {
+  position: fixed;
+  bottom: 120rpx;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.voice-input-btn {
+  right: 40rpx;
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.emergency-call-btn {
+  left: 40rpx;
+  background: linear-gradient(135deg, #F44336, #d32f2f);
+}
+
+.voice-input-btn:active,
+.emergency-call-btn:active {
+  transform: scale(0.9);
+}
+
+/* 添加联系人弹窗 */
+.add-contact-popup {
+  border-radius: 40rpx 40rpx 0 0 !important;
+}
+
+.add-contact-content {
+  padding: 40rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.popup-header text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  padding: 10rpx;
+}
+
+.add-form {
+  margin-bottom: 60rpx;
+}
+
+.form-group {
+  margin-bottom: 40rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 24rpx 30rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4rpx rgba(25, 118, 210, 0.1);
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: var(--background-secondary);
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.checkbox-item:active {
+  background-color: rgba(25, 118, 210, 0.05);
+}
+
+.checkbox-item van-icon {
+  margin-right: 20rpx;
+}
+
+.checkbox-item text {
+  font-size: 32rpx;
+  color: var(--text-primary);
+}
+
+.popup-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.popup-actions .btn-primary {
+  flex: 1;
+}
+
+/* 可访问性增强 */
+@media (prefers-reduced-motion: reduce) {
+  .contact-item:active,
+  .voice-input-btn:active,
+  .emergency-call-btn:active {
+    transform: none;
+  }
+
+  .checkbox-item:active {
+    background-color: var(--background-secondary);
+  }
+}
+
+/* 大字体模式支持 */
+@media (min-width: 768rpx) {
+  .contact-name {
+    font-size: 40rpx;
+  }
+
+  .quick-contact-name {
+    font-size: 30rpx;
+  }
+
+  .search-input {
+    font-size: 36rpx;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .contact-item {
+    border: 2rpx solid var(--border-color);
+  }
+
+  .form-input {
+    border-width: 3rpx;
+  }
+}

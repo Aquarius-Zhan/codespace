@@ -1,0 +1,402 @@
+/* pages/index/index.wxss */
+/* 主页八宫格布局样式 - 老年人友好型设计 */
+
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* 顶部欢迎区域 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.welcome-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.greeting {
+  font-size: 36rpx;
+  color: var(--text-secondary);
+  margin-bottom: 10rpx;
+}
+
+.user-name {
+  font-size: 44rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.date-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.current-date {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.current-time {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+/* 八宫格容器 */
+.grid-container {
+  margin-bottom: 40rpx;
+}
+
+.grid-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.grid-row-large {
+  height: 280rpx;
+}
+
+.grid-row-small {
+  height: 200rpx;
+}
+
+/* 联系人区域 - 大格子 */
+.grid-item-large {
+  width: 48%;
+  height: 280rpx;
+  background: var(--background-primary);
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.grid-item-large:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+}
+
+.contact-avatar-container {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.contact-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(25, 118, 210, 0.1);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.contact-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
+}
+
+.contact-relation {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+/* 功能区域 - 小格子 */
+.grid-item-small {
+  width: 23%;
+  height: 200rpx;
+  background: var(--background-primary);
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.grid-item-small:active {
+  transform: translateY(4rpx) scale(0.98);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+}
+
+.function-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+  position: relative;
+}
+
+.food-icon {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.medicine-icon {
+  background: linear-gradient(135deg, #FF9800, #f57c00);
+}
+
+.record-icon {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.alarm-icon {
+  background: linear-gradient(135deg, #F44336, #d32f2f);
+}
+
+.function-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 快速操作区域 */
+.quick-actions {
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: var(--background-primary);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.section-title::before {
+  content: '';
+  width: 8rpx;
+  height: 32rpx;
+  background: var(--primary-color);
+  margin-right: 20rpx;
+  border-radius: 4rpx;
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: var(--background-secondary);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.action-item:active {
+  transform: translateY(2rpx);
+  background: rgba(25, 118, 210, 0.05);
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30rpx;
+}
+
+.action-icon.emergency {
+  background: linear-gradient(135deg, #F44336, #d32f2f);
+}
+
+.action-icon.voice {
+  background: linear-gradient(135deg, #1976D2, #1565C0);
+}
+
+.action-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.action-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.action-desc {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 健康提醒区域 */
+.health-reminders {
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: var(--background-primary);
+  border-radius: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.reminder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.reminder-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: var(--background-secondary);
+  border-radius: 12rpx;
+  border-left: 6rpx solid transparent;
+}
+
+.reminder-item.medicine {
+  border-left-color: var(--warning-color);
+}
+
+.reminder-item.food {
+  border-left-color: var(--success-color);
+}
+
+.reminder-item.alarm {
+  border-left-color: var(--error-color);
+}
+
+.reminder-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: var(--background-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.reminder-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.reminder-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 6rpx;
+}
+
+.reminder-time {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 语音提示 */
+.voice-hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.voice-hint-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-size: 28rpx;
+}
+
+.voice-hint-content text {
+  margin-top: 20rpx;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 可访问性增强 */
+@media (prefers-reduced-motion: reduce) {
+  .grid-item-large:active,
+  .grid-item-small:active,
+  .action-item:active {
+    transform: none;
+  }
+
+  .voice-hint {
+    animation: none;
+  }
+}
+
+/* 大字体模式支持 */
+@media (min-width: 768rpx) {
+  .contact-name {
+    font-size: 40rpx;
+  }
+
+  .function-title {
+    font-size: 34rpx;
+  }
+
+  .action-title {
+    font-size: 36rpx;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .grid-item-large,
+  .grid-item-small,
+  .action-item {
+    border: 2rpx solid var(--border-color);
+  }
+
+  .function-icon,
+  .action-icon {
+    border: 2rpx solid rgba(255, 255, 255, 0.3);
+  }
+}

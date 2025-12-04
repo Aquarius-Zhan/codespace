@@ -1,0 +1,790 @@
+/* pages/medicine-identify/medicine-identify.wxss */
+/* 药物识别页面样式 - 老年人友好型设计 */
+
+.container {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%);
+  min-height: 100vh;
+  padding: 30rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 顶部说明 */
+.header-info {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.info-title {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.info-title text {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.info-desc {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 主要内容区域 */
+.main-content {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  min-height: 600rpx;
+}
+
+/* 图片预览区域 */
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-image {
+  width: 100%;
+  height: 500rpx;
+  border-radius: 16rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
+  margin-bottom: 40rpx;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 40rpx;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 30rpx;
+  background: var(--background-secondary);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  min-width: 160rpx;
+}
+
+.action-btn:active {
+  transform: translateY(4rpx);
+  background: rgba(25, 118, 210, 0.05);
+}
+
+.action-btn text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* 拍照/上传区域 */
+.capture-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500rpx;
+}
+
+.capture-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+  padding: 80rpx;
+  background: var(--background-secondary);
+  border-radius: 20rpx;
+  border: 4rpx dashed var(--border-color);
+  transition: all 0.3s ease;
+  margin-bottom: 60rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.capture-placeholder:active {
+  background: rgba(255, 152, 0, 0.05);
+  border-color: #FF9800;
+}
+
+.capture-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #FF9800;
+}
+
+.capture-tips {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+/* 快速操作按钮 */
+.quick-actions {
+  display: flex;
+  gap: 40rpx;
+  width: 100%;
+  justify-content: center;
+}
+
+.quick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 30rpx;
+  background: var(--background-primary);
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  min-width: 160rpx;
+}
+
+.quick-btn:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.quick-btn text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* 识别结果区域 */
+.recognition-result {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.result-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.confidence-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12rpx;
+}
+
+.confidence-score text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.confidence-bar {
+  width: 200rpx;
+  height: 12rpx;
+  background: var(--background-secondary);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF9800, #F57C00);
+  border-radius: 6rpx;
+  transition: width 0.8s ease;
+}
+
+/* 药物信息 */
+.medicine-info {
+  margin-bottom: 40rpx;
+  padding: 30rpx;
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 152, 0, 0.05));
+  border-radius: 16rpx;
+  border-left: 6rpx solid #FF9800;
+}
+
+.medicine-name {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 20rpx;
+}
+
+.medicine-name text {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.medicine-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.meta-item text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+.medicine-desc {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 通用区块样式 */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.section-title text {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.section-title.warning text {
+  color: #F44336;
+}
+
+.section-title.danger text {
+  color: #D32F2F;
+}
+
+/* 适应症 */
+.indications {
+  margin-bottom: 40rpx;
+}
+
+.indications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.indication-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 20rpx;
+  background: var(--background-secondary);
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.indication-item:active {
+  background: rgba(76, 175, 80, 0.05);
+  transform: translateY(2rpx);
+}
+
+.indication-icon {
+  width: 36rpx;
+  height: 36rpx;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.indication-text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 用法用量 */
+.dosage {
+  margin-bottom: 40rpx;
+}
+
+.dosage-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: rgba(33, 150, 243, 0.05);
+  border-radius: 16rpx;
+  border-left: 6rpx solid #2196F3;
+}
+
+.dosage-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.dosage-label {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 180rpx;
+  flex-shrink: 0;
+}
+
+.dosage-value {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 注意事项 */
+.warnings {
+  margin-bottom: 40rpx;
+}
+
+.warnings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.warning-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  padding: 24rpx;
+  background: rgba(244, 67, 54, 0.05);
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.warning-item:active {
+  background: rgba(244, 67, 54, 0.08);
+  transform: translateY(2rpx);
+}
+
+.warning-number {
+  width: 48rpx;
+  height: 48rpx;
+  background: #F44336;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.warning-text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 禁忌 */
+.contraindications {
+  margin-bottom: 40rpx;
+}
+
+.contraindication-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.contraindication-tag {
+  font-size: 28rpx !important;
+  font-weight: 500 !important;
+}
+
+/* 副作用 */
+.side-effects {
+  margin-bottom: 40rpx;
+}
+
+.effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.effect-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background: var(--background-secondary);
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.effect-item:active {
+  background: rgba(255, 152, 0, 0.05);
+  transform: translateY(2rpx);
+}
+
+.effect-name {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.effect-probability {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  background: rgba(255, 152, 0, 0.1);
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 操作按钮 */
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.action-button {
+  width: 100% !important;
+  height: 100rpx !important;
+  font-size: 34rpx !important;
+  font-weight: 500 !important;
+  border-radius: 16rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.action-button.secondary {
+  background-color: var(--background-primary) !important;
+  color: #FF9800 !important;
+  border: 2rpx solid #FF9800 !important;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400rpx;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.loading-text {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.loading-tips {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 历史记录入口 */
+.history-entrance {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.entrance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.entrance-header text:first-child {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.view-all {
+  font-size: 28rpx;
+  color: #FF9800;
+  font-weight: 500;
+}
+
+.history-list {
+  white-space: nowrap;
+}
+
+.history-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 30rpx;
+  width: 180rpx;
+  padding: 20rpx;
+  background: var(--background-secondary);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.history-item:active {
+  transform: translateY(4rpx);
+  background: rgba(255, 152, 0, 0.05);
+}
+
+.history-item:last-child {
+  margin-right: 0;
+}
+
+.history-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.history-name {
+  font-size: 26rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.history-time {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+}
+
+/* 常用药物 */
+.common-medicines {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.medicine-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30rpx;
+}
+
+.medicine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 20rpx;
+  background: var(--background-secondary);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  border: 2rpx solid transparent;
+}
+
+.medicine-card:active {
+  transform: translateY(4rpx);
+  background: rgba(255, 152, 0, 0.05);
+  border-color: #FF9800;
+}
+
+.medicine-icon {
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.medicine-card-name {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 10rpx;
+  text-align: center;
+}
+
+.medicine-card-type {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* 安全提示 */
+.safety-notice {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.notice-title {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.notice-title text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #F44336;
+}
+
+.notice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.notice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 20rpx;
+  background: rgba(244, 67, 54, 0.05);
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.notice-item:active {
+  background: rgba(244, 67, 54, 0.08);
+  transform: translateY(2rpx);
+}
+
+.notice-item text {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 浮动语音按钮 */
+.voice-input-btn {
+  position: fixed;
+  bottom: 120rpx;
+  right: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(255, 152, 0, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.voice-input-btn:active {
+  transform: scale(0.9);
+}
+
+/* 可访问性增强 */
+@media (prefers-reduced-motion: reduce) {
+  .recognition-result {
+    animation: none;
+  }
+
+  .action-btn:active,
+  .quick-btn:active,
+  .indication-item:active,
+  .warning-item:active,
+  .effect-item:active,
+  .history-item:active,
+  .medicine-card:active,
+  .notice-item:active {
+    transform: none;
+  }
+
+  .confidence-fill {
+    transition: none;
+  }
+}
+
+/* 大字体模式支持 */
+@media (min-width: 768rpx) {
+  .info-desc,
+  .medicine-desc,
+  .indication-text,
+  .warning-text,
+  .dosage-value {
+    font-size: 32rpx;
+  }
+
+  .history-name,
+  .medicine-card-name {
+    font-size: 28rpx;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .capture-placeholder {
+    border-width: 6rpx;
+    border-color: #FF9800;
+  }
+
+  .medicine-card {
+    border: 3rpx solid var(--border-color);
+  }
+
+  .indication-item,
+  .warning-item,
+  .effect-item,
+  .history-item,
+  .medicine-card,
+  .notice-item {
+    border: 2rpx solid var(--border-color);
+  }
+
+  .action-button.secondary {
+    border-width: 3rpx;
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/chat/chat",
+    "pages/chat/chat-detail",
+    "pages/food-identify/food-identify",
+    "pages/medicine-identify/medicine-identify",
+    "pages/records/records",
+    "pages/alarms/alarms",
+    "pages/alarms/add-alarm"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1976D2",
+    "navigationBarTitleText": "智能健康助手",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#1976D2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "🏠 主页"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "💬 联系人"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "📋 记录"
+      },
+      {
+        "pagePath": "pages/alarms/alarms",
+        "text": "⏰ 闹钟"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于附近紧急服务查找"
+    }
+  },
+  "requiredBackgroundModes": ["audio"],
+  "cloud": true,
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-toast": "@vant/weapp/toast/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-empty": "@vant/weapp/empty/index",
+    "van-tag": "@vant/weapp/tag/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}

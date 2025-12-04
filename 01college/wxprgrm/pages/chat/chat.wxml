@@ -1,0 +1,196 @@
+<!--chat.wxml-->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <van-icon name="search" size="36rpx" color="#999"></van-icon>
+      <input
+        class="search-input"
+        placeholder="搜索联系人"
+        placeholder-style="color: #999; font-size: 32rpx;"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+      />
+    </view>
+    <view class="add-contact" bindtap="addContact">
+      <van-icon name="plus" size="40rpx" color="white"></van-icon>
+    </view>
+  </view>
+
+  <!-- 常用联系人快捷区域 -->
+  <view class="quick-contacts" wx:if="{{!searchKeyword && quickContacts.length > 0}}">
+    <view class="section-title">
+      <text>常用联系人</text>
+    </view>
+    <scroll-view class="quick-contact-list" scroll-x="true" show-scrollbar="false">
+      <view class="quick-contact-item" wx:for="{{quickContacts}}" wx:key="id" bindtap="navigateToChatDetail" data-contact="{{item}}">
+        <view class="quick-contact-avatar-container">
+          <image class="quick-contact-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="dot" wx:if="{{item.unreadCount > 0}}"></view>
+        </view>
+        <text class="quick-contact-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 联系人列表 -->
+  <view class="contacts-container">
+    <view class="section-title" wx:if="{{!searchKeyword}}">
+      <text>所有联系人</text>
+      <text class="contact-count">({{filteredContacts.length}})</text>
+    </view>
+
+    <!-- 搜索结果提示 -->
+    <view class="search-result-tip" wx:if="{{searchKeyword}}">
+      <text>找到 {{filteredContacts.length}} 个联系人</text>
+    </view>
+
+    <!-- 联系人列表 -->
+    <scroll-view
+      class="contacts-list"
+      scroll-y="true"
+      enhanced="true"
+      show-scrollbar="false"
+      bindscrolltolower="loadMoreContacts"
+    >
+      <view class="contact-item" wx:for="{{filteredContacts}}" wx:key="id" bindtap="navigateToChatDetail" data-contact="{{item}}">
+        <view class="contact-avatar-container">
+          <image class="contact-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <!-- 未读消息指示器 -->
+          <view class="badge" wx:if="{{item.unreadCount > 0}}">{{item.unreadCount > 99 ? '99+' : item.unreadCount}}</view>
+        </view>
+
+        <view class="contact-content">
+          <view class="contact-header">
+            <text class="contact-name">{{item.name}}</text>
+            <text class="contact-time">{{item.lastMessageTime}}</text>
+          </view>
+          <view class="contact-info">
+            <text class="contact-relation">{{item.relation}}</text>
+            <text class="last-message">{{item.lastMessage}}</text>
+          </view>
+        </view>
+
+        <!-- 紧急联系人标识 -->
+        <view class="emergency-badge" wx:if="{{item.isEmergency}}">
+          <van-icon name="star" size="24rpx" color="#F44336"></van-icon>
+        </view>
+
+        <!-- 在线状态 -->
+        <view class="online-status" wx:if="{{item.isOnline}}">
+          <view class="online-dot"></view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{loadingMore}}">
+        <van-loading type="spinner" size="40rpx" color="#1976D2"></van-loading>
+        <text>加载中...</text>
+      </view>
+
+      <!-- 无更多数据 -->
+      <view class="no-more" wx:if="{{noMoreData && filteredContacts.length > 0}}">
+        <text>没有更多联系人了</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{filteredContacts.length === 0}}">
+    <view class="empty-icon">
+      <van-icon name="contact" size="120rpx" color="#ccc"></van-icon>
+    </view>
+    <text class="empty-text">{{searchKeyword ? '没有找到相关联系人' : '暂无联系人'}}</text>
+    <view class="empty-actions" wx:if="{{!searchKeyword}}">
+      <van-button type="primary" size="large" bind:click="addContact" custom-class="btn-primary">
+        <van-icon name="plus" size="36rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+        添加联系人
+      </van-button>
+    </view>
+  </view>
+
+  <!-- 语音输入按钮（浮动） -->
+  <view class="voice-input-btn" bindtap="startVoiceInput">
+    <van-icon name="volume-o" size="48rpx" color="white"></van-icon>
+  </view>
+
+  <!-- 紧急呼叫按钮（浮动） -->
+  <view class="emergency-call-btn" bindtap="emergencyCall">
+    <van-icon name="phone-o" size="48rpx" color="white"></van-icon>
+  </view>
+</view>
+
+<!-- 添加联系人弹窗 -->
+<van-popup
+  show="{{showAddContact}}"
+  position="bottom"
+  round="true"
+  bind:close="closeAddContact"
+  custom-class="add-contact-popup"
+>
+  <view class="add-contact-content">
+    <view class="popup-header">
+      <text>添加联系人</text>
+      <view class="close-btn" bindtap="closeAddContact">
+        <van-icon name="cross" size="40rpx" color="#999"></van-icon>
+      </view>
+    </view>
+
+    <view class="add-form">
+      <view class="form-group">
+        <text class="form-label">姓名</text>
+        <input
+          class="form-input"
+          placeholder="请输入联系人姓名"
+          value="{{newContact.name}}"
+          bindinput="onContactNameInput"
+          placeholder-style="color: #999; font-size: 30rpx;"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">关系</text>
+        <input
+          class="form-input"
+          placeholder="如：儿子、女儿、朋友等"
+          value="{{newContact.relation}}"
+          bindinput="onContactRelationInput"
+          placeholder-style="color: #999; font-size: 30rpx;"
+        />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">电话</text>
+        <input
+          class="form-input"
+          placeholder="请输入电话号码"
+          type="number"
+          value="{{newContact.phone}}"
+          bindinput="onContactPhoneInput"
+          placeholder-style="color: #999; font-size: 30rpx;"
+        />
+      </view>
+
+      <view class="form-group">
+        <view class="checkbox-group">
+          <view class="checkbox-item" bindtap="toggleEmergency">
+            <van-icon name="{{newContact.isEmergency ? 'checked' : 'circle'}}" size="40rpx" color="{{newContact.isEmergency ? '#1976D2' : '#ccc'}}"></van-icon>
+            <text>设为紧急联系人</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="popup-actions">
+      <van-button
+        type="primary"
+        size="large"
+        bind:click="saveContact"
+        loading="{{savingContact}}"
+        custom-class="btn-primary"
+      >
+        保存联系人
+      </van-button>
+    </view>
+  </view>
+</van-popup>

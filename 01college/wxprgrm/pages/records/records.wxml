@@ -1,0 +1,272 @@
+<!--records.wxml-->
+<view class="container">
+  <!-- 顶部标题和筛选 -->
+  <view class="header">
+    <view class="title">
+      <van-icon name="bookmark-o" size="48rpx" color="#2196F3"></van-icon>
+      <text>识别记录</text>
+    </view>
+    <view class="filter-tabs">
+      <view
+        class="filter-tab {{currentTab === 'all' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="all"
+      >
+        <text>全部</text>
+        <view class="tab-count">{{totalCount}}</view>
+      </view>
+      <view
+        class="filter-tab {{currentTab === 'food' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="food"
+      >
+        <text>菜品</text>
+        <view class="tab-count">{{foodCount}}</view>
+      </view>
+      <view
+        class="filter-tab {{currentTab === 'medicine' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="medicine"
+      >
+        <text>药物</text>
+        <view class="tab-count">{{medicineCount}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <van-icon name="search" size="36rpx" color="#999"></van-icon>
+      <input
+        class="search-input"
+        placeholder="搜索识别记录"
+        placeholder-style="color: #999; font-size: 32rpx;"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+      />
+      <view class="clear-search" wx:if="{{searchKeyword}}" bindtap="clearSearch">
+        <van-icon name="clear" size="32rpx" color="#999"></van-icon>
+      </view>
+    </view>
+    <view class="sort-btn" bindtap="toggleSort">
+      <van-icon name="sort" size="36rpx" color="#666"></van-icon>
+      <text>{{sortType === 'time' ? '时间排序' : '名称排序'}}</text>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <scroll-view
+    class="records-list"
+    scroll-y="true"
+    enhanced="true"
+    show-scrollbar="false"
+    bindscrolltolower="loadMoreRecords"
+    refresher-enabled="true"
+    bindrefresherrefresh="onRefresh"
+    refresher-triggered="{{refreshing}}"
+  >
+    <block wx:if="{{filteredRecords.length > 0}}">
+      <!-- 日期分组 -->
+      <block wx:for="{{groupedRecords}}" wx:key="date">
+        <view class="date-group">
+          <view class="date-header">
+            <text class="date-text">{{item.date}}</text>
+            <text class="date-count">({{item.records.length}}条记录)</text>
+          </view>
+
+          <!-- 记录项 -->
+          <view
+            class="record-item {{record.type}}"
+            wx:for="{{item.records}}"
+            wx:key="id"
+            wx:for-item="record"
+            bindtap="viewRecordDetail"
+            data-record="{{record}}"
+          >
+            <!-- 记录图片 -->
+            <view class="record-image">
+              <image src="{{record.image}}" mode="aspectFill"></image>
+              <view class="record-type-badge">
+                <van-icon name="{{record.type === 'food' ? 'restaurant-o' : 'bulb-o'}}" size="24rpx" color="white"></van-icon>
+              </view>
+            </view>
+
+            <!-- 记录内容 -->
+            <view class="record-content">
+              <view class="record-header">
+                <text class="record-name">{{record.type === 'food' ? record.dishName : record.medicineName}}</text>
+                <text class="record-time">{{formatTime(record.timestamp)}}</text>
+              </view>
+              <view class="record-info">
+                <text class="record-desc" wx:if="{{record.type === 'food'}}">{{record.result.description || '营养丰富，均衡搭配'}}</text>
+                <text class="record-desc" wx:if="{{record.type === 'medicine'}}">{{record.result.brand || '品牌药物'}} · {{record.result.type || '药品'}}</text>
+              </view>
+              <view class="record-tags" wx:if="{{record.tags && record.tags.length > 0}}">
+                <van-tag
+                  wx:for="{{record.tags}}"
+                  wx:key="*this"
+                  wx:for-item="tag"
+                  size="small"
+                  type="{{record.type === 'food' ? 'success' : 'warning'}}"
+                  custom-class="record-tag"
+                >{{tag}}</van-tag>
+              </view>
+            </view>
+
+            <!-- 操作按钮 -->
+            <view class="record-actions" catchtap="stopPropagation">
+              <view class="action-btn" bindtap="shareRecord" data-record="{{record}}">
+                <van-icon name="share-o" size="32rpx" color="#2196F3"></van-icon>
+              </view>
+              <view class="action-btn" bindtap="deleteRecord" data-record="{{record}}">
+                <van-icon name="delete-o" size="32rpx" color="#F44336"></van-icon>
+              </view>
+            </view>
+          </view>
+        </view>
+      </block>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:elif="{{!loading}}">
+      <view class="empty-icon">
+        <van-icon name="bookmark-o" size="120rpx" color="#ccc"></van-icon>
+      </view>
+      <text class="empty-text">{{searchKeyword ? '没有找到相关记录' : '暂无识别记录'}}</text>
+      <view class="empty-actions" wx:if="{{!searchKeyword}}">
+        <van-button type="primary" size="large" bind:click="navigateToIdentify" custom-class="action-button">
+          <van-icon name="photograph" size="40rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+          开始识别
+        </van-button>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{loading}}">
+      <van-loading type="spinner" size="40rpx" color="#2196F3"></van-loading>
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more" wx:if="{{noMore && filteredRecords.length > 0}}">
+      <text>没有更多记录了</text>
+    </view>
+  </scroll-view>
+
+  <!-- 统计信息 -->
+  <view class="statistics" wx:if="{{showStatistics && !loading}}">
+    <view class="stat-card">
+      <view class="stat-item">
+        <text class="stat-number">{{totalIdentifyCount}}</text>
+        <text class="stat-label">总识别次数</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-number">{{todayIdentifyCount}}</text>
+        <text class="stat-label">今日识别</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-number">{{thisWeekIdentifyCount}}</text>
+        <text class="stat-label">本周识别</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作（浮动） -->
+  <view class="floating-actions">
+    <view class="fab-btn primary" bindtap="navigateToIdentify">
+      <van-icon name="add" size="48rpx" color="white"></van-icon>
+    </view>
+    <view class="fab-btn secondary" bindtap="exportRecords">
+      <van-icon name="down" size="40rpx" color="white"></van-icon>
+    </view>
+  </view>
+
+  <!-- 底部安全区域 -->
+  <view class="safe-area"></view>
+</view>
+
+<!-- 记录详情弹窗 -->
+<van-popup
+  show="{{showRecordDetail}}"
+  position="bottom"
+  round="true"
+  bind:close="closeRecordDetail"
+  custom-class="record-detail-popup"
+>
+  <view class="record-detail-content" wx:if="{{selectedRecord}}">
+    <view class="detail-header">
+      <text class="detail-title">{{selectedRecord.type === 'food' ? '菜品详情' : '药物详情'}}</text>
+      <view class="close-btn" bindtap="closeRecordDetail">
+        <van-icon name="cross" size="40rpx" color="#999"></van-icon>
+      </view>
+    </view>
+
+    <!-- 菜品详情 -->
+    <view class="food-detail" wx:if="{{selectedRecord.type === 'food'}}">
+      <view class="detail-image">
+        <image src="{{selectedRecord.image}}" mode="aspectFit"></image>
+      </view>
+      <view class="detail-info">
+        <view class="info-section">
+          <text class="section-title">菜品名称</text>
+          <text class="section-content">{{selectedRecord.dishName}}</text>
+        </view>
+        <view class="info-section">
+          <text class="section-title">营养成分</text>
+          <view class="nutrition-grid">
+            <view class="nutrition-item">
+              <text class="nutrition-value">{{selectedRecord.result.nutrition.calories}}</text>
+              <text class="nutrition-unit">千卡</text>
+              <text class="nutrition-label">热量</text>
+            </view>
+            <view class="nutrition-item">
+              <text class="nutrition-value">{{selectedRecord.result.nutrition.protein}}</text>
+              <text class="nutrition-unit">g</text>
+              <text class="nutrition-label">蛋白质</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 药物详情 -->
+    <view class="medicine-detail" wx:if="{{selectedRecord.type === 'medicine'}}">
+      <view class="detail-image">
+        <image src="{{selectedRecord.image}}" mode="aspectFit"></image>
+      </view>
+      <view class="detail-info">
+        <view class="info-section">
+          <text class="section-title">药物名称</text>
+          <text class="section-content">{{selectedRecord.medicineName}}</text>
+        </view>
+        <view class="info-section">
+          <text class="section-title">规格</text>
+          <text class="section-content">{{selectedRecord.result.specification}}</text>
+        </view>
+        <view class="info-section">
+          <text class="section-title">用法用量</text>
+          <text class="section-content">{{selectedRecord.result.dosage.adult}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-footer">
+      <view class="detail-time">
+        <van-icon name="clock-o" size="28rpx" color="#999"></van-icon>
+        <text>{{formatDateTime(selectedRecord.timestamp)}}</text>
+      </view>
+      <view class="detail-actions">
+        <van-button type="default" size="small" bind:click="closeRecordDetail">关闭</van-button>
+        <van-button type="primary" size="small" bind:click="shareRecordDetail">分享</van-button>
+      </view>
+    </view>
+  </view>
+</van-popup>
+
+<!-- 语音提示按钮 -->
+<view class="voice-hint-btn" bindtap="playVoiceHint" wx:if="{{showVoiceHint}}">
+  <van-icon name="volume-o" size="40rpx" color="white"></van-icon>
+</view>

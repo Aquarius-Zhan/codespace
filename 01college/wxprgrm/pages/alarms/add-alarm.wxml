@@ -1,0 +1,153 @@
+<!--pages/alarms/add-alarm.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">🕐 添加新闹钟</text>
+  </view>
+
+  <!-- 闹钟设置表单 -->
+  <view class="form-container">
+    <!-- 时间选择 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-icon">⏰</text>
+        <text class="label-text">提醒时间</text>
+      </view>
+      <view class="time-selector" bindtap="showTimePicker">
+        <text class="time-text">{{selectedTime || '请选择时间'}}</text>
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+
+    <!-- 重复频率选择 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-icon">🔁</text>
+        <text class="label-text">重复频率</text>
+      </view>
+      <view class="repeat-selector" bindtap="showRepeatPicker">
+        <text class="repeat-text">{{selectedRepeatText || '请选择重复频率'}}</text>
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+
+    <!-- 药品选择 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-icon">💊</text>
+        <text class="label-text">选择药品</text>
+      </view>
+      <view class="medicine-selector" bindtap="showMedicinePicker">
+        <text class="medicine-text">{{selectedMedicineText || '请选择药品'}}</text>
+        <text class="arrow-icon">›</text>
+      </view>
+    </view>
+
+    <!-- 备注输入 -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-icon">📝</text>
+        <text class="label-text">备注说明</text>
+      </view>
+      <view class="note-input-container">
+        <input
+          class="note-input"
+          placeholder="请输入备注说明（可选）"
+          value="{{note}}"
+          bindinput="onNoteInput"
+          maxlength="50"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="action-area">
+    <view class="save-btn" bindtap="saveAlarm" hover-class="save-btn-hover">
+      <text class="save-btn-text">💾 保存闹钟</text>
+    </view>
+
+    <view class="cancel-btn" bindtap="goBack" hover-class="cancel-btn-hover">
+      <text class="cancel-btn-text">❌ 取消</text>
+    </view>
+  </view>
+
+  <!-- 时间选择弹窗 -->
+  <van-popup
+    show="{{showTimePopup}}"
+    position="bottom"
+    bind:close="hideTimePicker"
+    custom-class="time-popup"
+  >
+    <van-datetime-picker
+      type="time"
+      value="{{currentTime}}"
+      bind:confirm="onTimeConfirm"
+      bind:cancel="hideTimePicker"
+      min-hour="0"
+      max-hour="23"
+      min-minute="0"
+      max-minute="59"
+      title="选择时间"
+    />
+  </van-popup>
+
+  <!-- 重复频率选择弹窗 -->
+  <van-popup
+    show="{{showRepeatPopup}}"
+    position="bottom"
+    bind:close="hideRepeatPicker"
+    custom-class="repeat-popup"
+  >
+    <view class="picker-header">
+      <text class="picker-title">选择重复频率</text>
+    </view>
+    <view class="repeat-options">
+      <view
+        class="repeat-option {{item.checked ? 'checked' : ''}}"
+        wx:for="{{repeatOptions}}"
+        wx:key="value"
+        bindtap="selectRepeat"
+        data-value="{{item.value}}"
+      >
+        <text class="option-text">{{item.text}}</text>
+        <text class="check-icon" wx:if="{{item.checked}}">✓</text>
+      </view>
+    </view>
+    <view class="picker-actions">
+      <view class="picker-btn cancel" bindtap="hideRepeatPicker">取消</view>
+      <view class="picker-btn confirm" bindtap="confirmRepeat">确定</view>
+    </view>
+  </van-popup>
+
+  <!-- 药品选择弹窗 -->
+  <van-popup
+    show="{{showMedicinePopup}}"
+    position="bottom"
+    bind:close="hideMedicinePicker"
+    custom-class="medicine-popup"
+  >
+    <view class="picker-header">
+      <text class="picker-title">选择药品</text>
+    </view>
+    <view class="medicine-list">
+      <view
+        class="medicine-option {{item.checked ? 'checked' : ''}}"
+        wx:for="{{medicineOptions}}"
+        wx:key="id"
+        bindtap="selectMedicine"
+        data-id="{{item.id}}"
+      >
+        <view class="medicine-info">
+          <text class="medicine-name">{{item.name}}</text>
+          <text class="medicine-dosage">{{item.dosage}}</text>
+        </view>
+        <text class="check-icon" wx:if="{{item.checked}}">✓</text>
+      </view>
+    </view>
+    <view class="picker-actions">
+      <view class="picker-btn cancel" bindtap="hideMedicinePicker">取消</view>
+      <view class="picker-btn confirm" bindtap="confirmMedicine">确定</view>
+    </view>
+  </van-popup>
+</view>

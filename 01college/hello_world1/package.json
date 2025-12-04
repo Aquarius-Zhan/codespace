@@ -1,0 +1,23 @@
+{
+  "name": "hello-rogue-world",
+  "version": "1.0.0",
+  "description": "A 2D platformer game with Mario-style physics, Cat Mario traps, and Roguelike elements",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Build process would go here'",
+    "test": "echo 'Tests would go here'"
+  },
+  "dependencies": {
+    "kaboom": "^3000.1.0"
+  },
+  "keywords": [
+    "game",
+    "platformer",
+    "roguelike",
+    "html5",
+    "javascript"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

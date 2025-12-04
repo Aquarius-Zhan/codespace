@@ -1,0 +1,41 @@
+<!--pages/alarms/alarms.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">⏰ 我的闹钟</text>
+  </view>
+
+  <!-- 主要功能区 - 添加闹钟按钮 -->
+  <view class="main-action-area">
+    <view class="add-alarm-btn primary-button" bindtap="goToAddAlarm" hover-class="button-hover">
+      <view class="button-icon">⏰</view>
+      <text class="add-text primary-text">添加新闹钟</text>
+      <text class="add-subtitle">点击设置服药提醒</text>
+    </view>
+  </view>
+
+  <!-- 闹钟列表 -->
+  <view class="alarm-list">
+    <block wx:if="{{alarms.length > 0}}">
+      <view class="alarm-item" wx:for="{{alarms}}" wx:key="id">
+        <view class="alarm-content">
+          <view class="alarm-time">{{item.time}}</view>
+          <view class="alarm-label">{{item.label}}</view>
+          <view class="alarm-repeat">{{item.repeat}}</view>
+        </view>
+        <view class="alarm-controls">
+          <switch class="alarm-switch" checked="{{item.enabled}}" bindchange="toggleAlarm" data-id="{{item.id}}"/>
+          <view class="delete-btn" bindtap="deleteAlarm" data-id="{{item.id}}">
+            <text class="delete-icon">🗑️</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">⏰</text>
+      <text class="empty-text">暂无闹钟</text>
+      <text class="empty-hint">点击上方按钮添加您的第一个闹钟</text>
+    </view>
+  </view>
+</view>

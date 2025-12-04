@@ -1,0 +1,603 @@
+/* pages/records/records.wxss */
+/* 记录页面样式 - 老年人友好型设计 */
+
+.container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 30rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 顶部标题和筛选 */
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.title text {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 20rpx;
+}
+
+.filter-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: var(--background-secondary);
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.filter-tab.active {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.filter-tab.active text {
+  color: white;
+  font-weight: 500;
+}
+
+.filter-tab text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.tab-count {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  background: rgba(33, 150, 243, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  min-width: 36rpx;
+  text-align: center;
+}
+
+.filter-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50rpx;
+  padding: 20rpx 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.search-input {
+  flex: 1;
+  font-size: 32rpx;
+  margin-left: 20rpx;
+  color: var(--text-primary);
+}
+
+.clear-search {
+  padding: 10rpx;
+}
+
+.sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 20rpx 30rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.sort-btn:active {
+  transform: translateY(2rpx);
+}
+
+.sort-btn text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+}
+
+/* 记录列表 */
+.records-list {
+  height: calc(100vh - 400rpx);
+  margin-bottom: 30rpx;
+}
+
+/* 日期分组 */
+.date-group {
+  margin-bottom: 30rpx;
+}
+
+.date-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 0 10rpx;
+  margin-bottom: 20rpx;
+}
+
+.date-text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.date-count {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  background: var(--background-secondary);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+/* 记录项 */
+.record-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.record-item:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.record-item.food {
+  border-left: 6rpx solid #4CAF50;
+}
+
+.record-item.medicine {
+  border-left: 6rpx solid #FF9800;
+}
+
+/* 记录图片 */
+.record-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  margin-right: 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.record-image image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+}
+
+.record-type-badge {
+  position: absolute;
+  top: -6rpx;
+  right: -6rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.record-item.food .record-type-badge {
+  background: #4CAF50;
+}
+
+.record-item.medicine .record-type-badge {
+  background: #FF9800;
+}
+
+/* 记录内容 */
+.record-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.record-name {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  max-width: 400rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-time {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.record-desc {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.record-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.record-tag {
+  font-size: 22rpx !important;
+}
+
+/* 记录操作 */
+.record-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-left: 20rpx;
+}
+
+.action-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: var(--background-secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.9);
+  background: rgba(25, 118, 210, 0.05);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 60rpx;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-icon {
+  margin-bottom: 40rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: var(--text-secondary);
+  margin-bottom: 60rpx;
+}
+
+.empty-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.action-button {
+  width: 300rpx !important;
+  height: 100rpx !important;
+  font-size: 34rpx !important;
+  font-weight: 500 !important;
+  border-radius: 16rpx !important;
+}
+
+/* 加载状态 */
+.load-more,
+.no-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  color: var(--text-secondary);
+  font-size: 28rpx;
+  gap: 20rpx;
+}
+
+/* 统计信息 */
+.statistics {
+  margin-bottom: 30rpx;
+}
+
+.stat-card {
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.stat-number {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.stat-divider {
+  width: 2rpx;
+  background: var(--border-color);
+  margin: 0 40rpx;
+}
+
+/* 浮动操作按钮 */
+.floating-actions {
+  position: fixed;
+  bottom: 120rpx;
+  right: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  z-index: 1000;
+}
+
+.fab-btn {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.fab-btn:active {
+  transform: scale(0.9);
+}
+
+.fab-btn.primary {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.fab-btn.secondary {
+  background: linear-gradient(135deg, #FF9800, #F57C00);
+  width: 100rpx;
+  height: 100rpx;
+}
+
+/* 记录详情弹窗 */
+.record-detail-popup {
+  border-radius: 40rpx 40rpx 0 0 !important;
+  max-height: 80vh;
+}
+
+.record-detail-content {
+  padding: 40rpx;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.detail-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  padding: 10rpx;
+}
+
+.detail-image {
+  width: 100%;
+  height: 400rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 30rpx;
+  background: var(--background-secondary);
+}
+
+.detail-image image {
+  width: 100%;
+  height: 100%;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.section-content {
+  font-size: 32rpx;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.nutrition-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 20rpx;
+  background: var(--background-secondary);
+  border-radius: 12rpx;
+}
+
+.nutrition-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.nutrition-unit {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.nutrition-label {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.detail-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40rpx;
+  padding-top: 30rpx;
+  border-top: 2rpx solid var(--border-color);
+}
+
+.detail-time {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+/* 语音提示按钮 */
+.voice-hint-btn {
+  position: fixed;
+  bottom: 120rpx;
+  left: 40rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(76, 175, 80, 0.4);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.voice-hint-btn:active {
+  transform: scale(0.9);
+}
+
+/* 可访问性增强 */
+@media (prefers-reduced-motion: reduce) {
+  .record-item:active,
+  .sort-btn:active,
+  .action-btn:active,
+  .fab-btn:active {
+    transform: none;
+  }
+}
+
+/* 大字体模式支持 */
+@media (min-width: 768rpx) {
+  .record-name,
+  .detail-title,
+  .section-content {
+    font-size: 36rpx;
+  }
+
+  .record-desc {
+    font-size: 30rpx;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .record-item {
+    border: 2rpx solid var(--border-color);
+  }
+
+  .search-input-wrapper,
+  .sort-btn {
+    border: 2rpx solid var(--border-color);
+  }
+}

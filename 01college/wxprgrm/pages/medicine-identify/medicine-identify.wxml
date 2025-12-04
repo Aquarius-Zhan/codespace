@@ -1,0 +1,291 @@
+<!--medicine-identify.wxml-->
+<view class="container">
+  <!-- 顶部说明 -->
+  <view class="header-info">
+    <view class="info-title">
+      <van-icon name="bulb-o" size="48rpx" color="#FF9800"></van-icon>
+      <text>药物识别</text>
+    </view>
+    <text class="info-desc">拍摄药物包装或药片，智能识别药物信息、用法用量和注意事项</text>
+  </view>
+
+  <!-- 主要操作区域 -->
+  <view class="main-content">
+    <!-- 图片预览区域 -->
+    <view class="image-preview" wx:if="{{imagePreview}}">
+      <image class="preview-image" src="{{imagePreview}}" mode="aspectFit"></image>
+      <view class="preview-actions">
+        <view class="action-btn" bindtap="retakePhoto">
+          <van-icon name="replay" size="40rpx" color="#1976D2"></van-icon>
+          <text>重拍</text>
+        </view>
+        <view class="action-btn" bindtap="chooseNewImage">
+          <van-icon name="photo-o" size="40rpx" color="#FF9800"></van-icon>
+          <text>换一张</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 拍照/上传区域 -->
+    <view class="capture-area" wx:else>
+      <view class="capture-placeholder" bindtap="takePhoto">
+        <van-icon name="photograph" size="120rpx" color="#FF9800"></van-icon>
+        <text class="capture-text">拍摄药物</text>
+        <text class="capture-tips">或从相册选择药物图片</text>
+      </view>
+
+      <!-- 快速操作按钮 -->
+      <view class="quick-actions">
+        <view class="quick-btn" bindtap="takePhoto">
+          <van-icon name="camera-o" size="48rpx" color="#FF9800"></van-icon>
+          <text>拍照</text>
+        </view>
+        <view class="quick-btn" bindtap="chooseImage">
+          <van-icon name="photo-o" size="48rpx" color="#FF9800"></van-icon>
+          <text>相册</text>
+        </view>
+        <view class="quick-btn" bindtap="toggleFlash">
+          <van-icon name="flashlight" size="48rpx" color="{{flashOn ? '#F44336' : '#999'}}"></van-icon>
+          <text>{{flashOn ? '关闭闪光' : '开启闪光'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 识别结果区域 -->
+    <view class="recognition-result" wx:if="{{recognitionResult}}">
+      <view class="result-header">
+        <text class="result-title">识别结果</text>
+        <view class="confidence-score">
+          <text>置信度: {{recognitionResult.confidence}}%</text>
+          <view class="confidence-bar">
+            <view class="confidence-fill" style="width: {{recognitionResult.confidence}}%"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 药物基本信息 -->
+      <view class="medicine-info">
+        <view class="medicine-name">
+          <van-icon name="star" size="32rpx" color="#FF9800"></van-icon>
+          <text>{{recognitionResult.medicineName}}</text>
+        </view>
+        <view class="medicine-meta">
+          <view class="meta-item">
+            <van-icon name="shop-o" size="24rpx" color="#666"></van-icon>
+            <text>品牌：{{recognitionResult.brand}}</text>
+          </view>
+          <view class="meta-item">
+            <van-icon name="certificate" size="24rpx" color="#666"></van-icon>
+            <text>规格：{{recognitionResult.specification}}</text>
+          </view>
+          <view class="meta-item">
+            <van-icon name="label-o" size="24rpx" color="#666"></van-icon>
+            <text>类型：{{recognitionResult.type}}</text>
+          </view>
+        </view>
+        <text class="medicine-desc">{{recognitionResult.description}}</text>
+      </view>
+
+      <!-- 适应症 -->
+      <view class="indications">
+        <view class="section-title">
+          <van-icon name="heart-o" size="32rpx" color="#F44336"></van-icon>
+          <text>适应症</text>
+        </view>
+        <view class="indications-list">
+          <view class="indication-item" wx:for="{{recognitionResult.indications}}" wx:key="index">
+            <view class="indication-icon">
+              <van-icon name="check" size="24rpx" color="#4CAF50"></van-icon>
+            </view>
+            <text class="indication-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 用法用量 -->
+      <view class="dosage">
+        <view class="section-title">
+          <van-icon name="clock-o" size="32rpx" color="#2196F3"></van-icon>
+          <text>用法用量</text>
+        </view>
+        <view class="dosage-content">
+          <view class="dosage-item">
+            <text class="dosage-label">成人用量：</text>
+            <text class="dosage-value">{{recognitionResult.dosage.adult}}</text>
+          </view>
+          <view class="dosage-item" wx:if="{{recognitionResult.dosage.elderly}}">
+            <text class="dosage-label">老年人用量：</text>
+            <text class="dosage-value">{{recognitionResult.dosage.elderly}}</text>
+          </view>
+          <view class="dosage-item">
+            <text class="dosage-label">服用方法：</text>
+            <text class="dosage-value">{{recognitionResult.dosage.method}}</text>
+          </view>
+          <view class="dosage-item">
+            <text class="dosage-label">服用时间：</text>
+            <text class="dosage-value">{{recognitionResult.dosage.timing}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 注意事项 -->
+      <view class="warnings">
+        <view class="section-title warning">
+          <van-icon name="warning" size="32rpx" color="#F44336"></van-icon>
+          <text>注意事项</text>
+        </view>
+        <view class="warnings-list">
+          <view class="warning-item" wx:for="{{recognitionResult.warnings}}" wx:key="index">
+            <view class="warning-number">{{index + 1}}</view>
+            <text class="warning-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 禁忌 -->
+      <view class="contraindications" wx:if="{{recognitionResult.contraindications.length > 0}}">
+        <view class="section-title danger">
+          <van-icon name="close-circle" size="32rpx" color="#F44336"></van-icon>
+          <text>禁忌人群</text>
+        </view>
+        <view class="contraindication-tags">
+          <van-tag
+            wx:for="{{recognitionResult.contraindications}}"
+            wx:key="*this"
+            type="danger"
+            size="large"
+            custom-class="contraindication-tag"
+          >{{item}}</van-tag>
+        </view>
+      </view>
+
+      <!-- 副作用 -->
+      <view class="side-effects">
+        <view class="section-title">
+          <van-icon name="info-o" size="32rpx" color="#FF9800"></van-icon>
+          <text>可能副作用</text>
+        </view>
+        <view class="effects-list">
+          <view class="effect-item" wx:for="{{recognitionResult.sideEffects}}" wx:key="index">
+            <text class="effect-name">{{item.name}}</text>
+            <text class="effect-probability">{{item.probability}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="result-actions">
+        <van-button
+          type="primary"
+          size="large"
+          bind:click="saveRecord"
+          loading="{{saving}}"
+          custom-class="action-button"
+        >
+          <van-icon name="bookmark-o" size="40rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+          保存记录
+        </van-button>
+
+        <van-button
+          type="default"
+          size="large"
+          bind:click="setReminder"
+          custom-class="action-button secondary"
+        >
+          <van-icon name="clock-o" size="40rpx" color="#FF9800" style="margin-right: 16rpx;"></van-icon>
+          设置提醒
+        </van-button>
+
+        <van-button
+          type="warning"
+          size="large"
+          bind:click="identifyAgain"
+          custom-class="action-button"
+        >
+          <van-icon name="replay" size="40rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+          重新识别
+        </van-button>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{identifying}}">
+      <view class="loading-content">
+        <van-loading type="spinner" size="80rpx" color="#FF9800"></van-loading>
+        <text class="loading-text">正在识别药物...</text>
+        <text class="loading-tips">这可能需要几秒钟</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录快捷入口 -->
+  <view class="history-entrance" wx:if="{{!recognitionResult && !imagePreview}}">
+    <view class="entrance-header">
+      <text>最近识别</text>
+      <text class="view-all" bindtap="viewAllHistory">查看全部</text>
+    </view>
+    <scroll-view class="history-list" scroll-x="true" show-scrollbar="false">
+      <view
+        class="history-item"
+        wx:for="{{recentHistory}}"
+        wx:key="id"
+        bindtap="loadHistoryItem"
+        data-item="{{item}}"
+      >
+        <image class="history-image" src="{{item.image}}" mode="aspectFill"></image>
+        <text class="history-name">{{item.medicineName}}</text>
+        <text class="history-time">{{item.time}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 常用药物 -->
+  <view class="common-medicines" wx:if="{{!imagePreview && !recognitionResult}}">
+    <view class="section-title">
+      <van-icon name="star-o" size="32rpx" color="#FF9800"></van-icon>
+      <text>常用药物</text>
+    </view>
+    <view class="medicine-grid">
+      <view
+        class="medicine-card"
+        wx:for="{{commonMedicines}}"
+        wx:key="id"
+        bindtap="quickIdentify"
+        data-medicine="{{item}}"
+      >
+        <view class="medicine-icon">
+          <van-icon name="{{item.icon}}" size="48rpx" color="#FF9800"></van-icon>
+        </view>
+        <text class="medicine-card-name">{{item.name}}</text>
+        <text class="medicine-card-type">{{item.type}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 安全提示 -->
+  <view class="safety-notice" wx:if="{{!imagePreview && !recognitionResult}}">
+    <view class="notice-title">
+      <van-icon name="shield-o" size="32rpx" color="#F44336"></van-icon>
+      <text>安全提示</text>
+    </view>
+    <view class="notice-content">
+      <view class="notice-item">
+        <van-icon name="warning" size="24rpx" color="#F44336"></van-icon>
+        <text>本识别结果仅供参考，不能替代专业医师指导</text>
+      </view>
+      <view class="notice-item">
+        <van-icon name="warning" size="24rpx" color="#F44336"></van-icon>
+        <text>用药前请仔细阅读说明书或咨询医师药师</text>
+      </view>
+      <view class="notice-item">
+        <van-icon name="warning" size="24rpx" color="#F44336"></van-icon>
+        <text>如有不适，请立即停药并及时就医</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 语音输入按钮（浮动） -->
+<view class="voice-input-btn" bindtap="startVoiceInput">
+  <van-icon name="volume-o" size="48rpx" color="white"></van-icon>
+</view>

@@ -1,0 +1,339 @@
+<!--chat-detail.wxml-->
+<view class="container">
+  <!-- 顶部联系人信息栏 -->
+  <view class="contact-header">
+    <view class="contact-info" bindtap="showContactInfo">
+      <image class="contact-avatar" src="{{contact.avatar}}" mode="aspectFill"></image>
+      <view class="contact-details">
+        <text class="contact-name">{{contact.name}}</text>
+        <text class="contact-status">{{contact.isOnline ? '在线' : '离线'}}</text>
+      </view>
+      <view class="header-actions">
+        <view class="action-btn" bindtap="makePhoneCall">
+          <van-icon name="phone-o" size="40rpx" color="#1976D2"></van-icon>
+        </view>
+        <view class="action-btn" bindtap="makeVideoCall">
+          <van-icon name="video-o" size="40rpx" color="#4CAF50"></van-icon>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y="true"
+    scroll-into-view="{{scrollToMessage}}"
+    scroll-with-animation="true"
+    enhanced="true"
+    show-scrollbar="false"
+    bindscrolltoupper="loadMoreMessages"
+  >
+    <!-- 日期分隔符 -->
+    <view class="date-separator" wx:if="{{messages.length > 0}}">
+      <text class="date-text">{{formatDate(messages[0].timestamp)}}</text>
+    </view>
+
+    <!-- 消息项 -->
+    <view
+      class="message-item {{item.type}}"
+      wx:for="{{messages}}"
+      wx:key="id"
+      id="msg-{{item.id}}"
+    >
+      <!-- 接收的消息 -->
+      <view class="message received" wx:if="{{item.type === 'received'}}">
+        <image class="message-avatar" src="{{contact.avatar}}" mode="aspectFill"></image>
+        <view class="message-bubble received-bubble">
+          <!-- 文字消息 -->
+          <text class="message-text" wx:if="{{item.contentType === 'text'}}">{{item.content}}</text>
+
+          <!-- 图片消息 -->
+          <image
+            class="message-image"
+            wx:if="{{item.contentType === 'image'}}"
+            src="{{item.content}}"
+            mode="widthFix"
+            bindtap="previewImage"
+            data-src="{{item.content}}"
+          ></image>
+
+          <!-- 语音消息 -->
+          <view
+            class="message-voice"
+            wx:if="{{item.contentType === 'voice'}}"
+            bindtap="playVoice"
+            data-message="{{item}}"
+          >
+            <van-icon name="volume-o" size="40rpx" color="#1976D2"></van-icon>
+            <text class="voice-duration">{{item.duration}}''</text>
+          </view>
+
+          <!-- 位置消息 -->
+          <view class="message-location" wx:if="{{item.contentType === 'location'}}">
+            <van-icon name="location-o" size="40rpx" color="#FF9800"></van-icon>
+            <view class="location-info">
+              <text class="location-name">{{item.location.name}}</text>
+              <text class="location-address">{{item.location.address}}</text>
+            </view>
+          </view>
+
+          <view class="message-status">
+            <text class="message-time">{{formatTime(item.timestamp)}}</text>
+            <view class="message-read" wx:if="{{item.isRead}}">
+              <van-icon name="success" size="24rpx" color="#4CAF50"></van-icon>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 发送的消息 -->
+      <view class="message sent" wx:if="{{item.type === 'sent'}}">
+        <view class="message-bubble sent-bubble">
+          <!-- 文字消息 -->
+          <text class="message-text" wx:if="{{item.contentType === 'text'}}">{{item.content}}</text>
+
+          <!-- 图片消息 -->
+          <image
+            class="message-image"
+            wx:if="{{item.contentType === 'image'}}"
+            src="{{item.content}}"
+            mode="widthFix"
+            bindtap="previewImage"
+            data-src="{{item.content}}"
+          ></image>
+
+          <!-- 语音消息 -->
+          <view
+            class="message-voice"
+            wx:if="{{item.contentType === 'voice'}}"
+            bindtap="playVoice"
+            data-message="{{item}}"
+          >
+            <van-icon name="volume-o" size="40rpx" color="white"></van-icon>
+            <text class="voice-duration">{{item.duration}}''</text>
+          </view>
+
+          <!-- 位置消息 -->
+          <view class="message-location" wx:if="{{item.contentType === 'location'}}">
+            <van-icon name="location-o" size="40rpx" color="white"></van-icon>
+            <view class="location-info">
+              <text class="location-name">{{item.location.name}}</text>
+              <text class="location-address">{{item.location.address}}</text>
+            </view>
+          </view>
+
+          <view class="message-status">
+            <text class="message-time">{{formatTime(item.timestamp)}}</text>
+            <van-icon name="{{item.sendStatus}}" size="24rpx" color="{{item.sendStatus === 'success' ? '#4CAF50' : '#999'}}" wx:if="{{item.sendStatus}}"></van-icon>
+          </view>
+        </view>
+        <image class="message-avatar" src="{{userAvatar}}" mode="aspectFill"></image>
+      </view>
+
+      <!-- 系统消息 -->
+      <view class="system-message" wx:if="{{item.type === 'system'}}">
+        <text class="system-text">{{item.content}}</text>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more-messages" wx:if="{{loadingMoreMessages}}">
+      <van-loading type="spinner" size="36rpx" color="#999"></van-loading>
+      <text>加载历史消息...</text>
+    </view>
+
+    <!-- 没有更多消息 -->
+    <view class="no-more-messages" wx:if="{{noMoreMessages && messages.length > 0}}">
+      <text>没有更多历史消息了</text>
+    </view>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-area">
+    <view class="input-toolbar">
+      <!-- 语音输入 -->
+      <view class="tool-btn" bindtap="toggleVoiceInput">
+        <van-icon name="{{isVoiceMode ? 'keyboard-o' : 'volume-o'}}" size="48rpx" color="#1976D2"></van-icon>
+      </view>
+
+      <!-- 文字输入 -->
+      <input
+        class="message-input"
+        wx:if="{{!isVoiceMode}}"
+        placeholder="输入消息..."
+        placeholder-style="color: #999; font-size: 32rpx;"
+        value="{{inputText}}"
+        bindinput="onInputText"
+        bindconfirm="sendMessage"
+        focus="{{inputFocus}}"
+        auto-height="true"
+        adjust-position="true"
+      />
+
+      <!-- 语音录制按钮 -->
+      <view
+        class="voice-record-btn {{isRecording ? 'recording' : ''}}"
+        wx:if="{{isVoiceMode}}"
+        bindtouchstart="startRecording"
+        bindtouchend="stopRecording"
+        bindtouchmove="onVoiceTouchMove"
+      >
+        <van-icon name="mic" size="48rpx" color="white"></van-icon>
+      </view>
+
+      <!-- 更多功能 -->
+      <view class="tool-btn" bindtap="toggleMorePanel">
+        <van-icon name="add-o" size="48rpx" color="#1976D2"></van-icon>
+      </view>
+
+      <!-- 发送按钮 -->
+      <view
+        class="send-btn {{inputText.trim() ? 'active' : ''}}"
+        wx:if="{{inputText.trim()}}"
+        bindtap="sendMessage"
+      >
+        <van-icon name="arrow" size="48rpx" color="white"></van-icon>
+      </view>
+    </view>
+
+    <!-- 更多功能面板 -->
+    <view class="more-panel {{showMorePanel ? 'show' : ''}}" wx:if="{{isVoiceMode === false}}">
+      <view class="more-grid">
+        <view class="more-item" bindtap="chooseImage">
+          <view class="more-icon">
+            <van-icon name="photo-o" size="48rpx" color="#4CAF50"></van-icon>
+          </view>
+          <text>照片</text>
+        </view>
+
+        <view class="more-item" bindtap="takePhoto">
+          <view class="more-icon">
+            <van-icon name="photograph" size="48rpx" color="#FF9800"></van-icon>
+          </view>
+          <text>拍照</text>
+        </view>
+
+        <view class="more-item" bindtap="chooseLocation">
+          <view class="more-icon">
+            <van-icon name="location-o" size="48rpx" color="#2196F3"></van-icon>
+          </view>
+          <text>位置</text>
+        </view>
+
+        <view class="more-item" bindtap="sendQuickMessage">
+          <view class="more-icon">
+            <van-icon name="chat-o" size="48rpx" color="#9C27B0"></van-icon>
+          </view>
+          <text>快捷回复</text>
+        </view>
+
+        <view class="more-item" bindtap="sendHealthData">
+          <view class="more-icon">
+            <van-icon name="heart-o" size="48rpx" color="#F44336"></van-icon>
+          </view>
+          <text>健康数据</text>
+        </view>
+
+        <view class="more-item" bindtap="sendEmergencyAlert">
+          <view class="more-icon">
+            <van-icon name="warning-o" size="48rpx" color="#F44336"></van-icon>
+          </view>
+          <text>紧急求助</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 语音录制提示 -->
+    <view class="voice-hint" wx:if="{{showVoiceHint}}">
+      <view class="voice-hint-content">
+        <van-icon name="mic" size="80rpx" color="#F44336"></van-icon>
+        <text>{{voiceHintText}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 快捷回复弹窗 -->
+<van-popup
+  show="{{showQuickReply}}"
+  position="bottom"
+  round="true"
+  bind:close="closeQuickReply"
+  custom-class="quick-reply-popup"
+>
+  <view class="quick-reply-content">
+    <view class="popup-header">
+      <text>快捷回复</text>
+      <view class="close-btn" bindtap="closeQuickReply">
+        <van-icon name="cross" size="40rpx" color="#999"></van-icon>
+      </view>
+    </view>
+
+    <view class="quick-reply-list">
+      <view
+        class="quick-reply-item"
+        wx:for="{{quickReplyMessages}}"
+        wx:key="id"
+        bindtap="selectQuickReply"
+        data-message="{{item}}"
+      >
+        <text class="quick-reply-text">{{item.text}}</text>
+        <text class="quick-reply-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+</van-popup>
+
+<!-- 联系人信息弹窗 -->
+<van-popup
+  show="{{showContactDetail}}"
+  position="bottom"
+  round="true"
+  bind:close="closeContactDetail"
+  custom-class="contact-detail-popup"
+>
+  <view class="contact-detail-content">
+    <view class="contact-detail-header">
+      <image class="contact-detail-avatar" src="{{contact.avatar}}" mode="aspectFill"></image>
+      <view class="contact-detail-info">
+        <text class="contact-detail-name">{{contact.name}}</text>
+        <text class="contact-detail-relation">{{contact.relation}}</text>
+        <text class="contact-detail-phone">{{contact.phone}}</text>
+      </view>
+    </view>
+
+    <view class="contact-detail-actions">
+      <view class="detail-action-btn" bindtap="makePhoneCall">
+        <van-icon name="phone" size="48rpx" color="#1976D2"></van-icon>
+        <text>语音通话</text>
+      </view>
+
+      <view class="detail-action-btn" bindtap="makeVideoCall">
+        <van-icon name="video" size="48rpx" color="#4CAF50"></van-icon>
+        <text>视频通话</text>
+      </view>
+
+      <view class="detail-action-btn" bindtap="viewHealthData">
+        <van-icon name="heart" size="48rpx" color="#F44336"></van-icon>
+        <text>健康数据</text>
+      </view>
+
+      <view class="detail-action-btn" bindtap="sendLocation">
+        <van-icon name="location" size="48rpx" color="#FF9800"></van-icon>
+        <text>发送位置</text>
+      </view>
+    </view>
+
+    <view class="contact-detail-settings">
+      <view class="setting-item" bindtap="toggleEmergencyContact">
+        <view class="setting-left">
+          <text>紧急联系人</text>
+        </view>
+        <view class="setting-right">
+          <van-icon name="{{contact.isEmergency ? 'checked' : 'circle'}}" size="40rpx" color="{{contact.isEmergency ? '#1976D2' : '#ccc'}}"></van-icon>
+        </view>
+      </view>
+    </view>
+  </view>
+</van-popup>
