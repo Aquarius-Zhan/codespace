@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Hello, Rogue World!</title>
+</head>
+<body>
+    <h1>Game Loading Test</h1>
+    <div id="status">Loading...</div>
+    <div id="logs"></div>
+
+    <!-- Kaboom.js -->
+    <script src="https://unpkg.com/kaboom@3000.1.0/dist/kaboom.js"></script>
+
+    <!-- Game Scripts -->
+    <script src="src/game.js"></script>
+    <script src="src/scenes/MainScene.js"></script>
+    <script src="src/entities/Player.js"></script>
+    <script src="src/entities/Enemy.js"></script>
+    <script src="src/systems/LevelGenerator.js"></script>
+    <script src="src/systems/TrapSystem.js"></script>
+    <script src="src/ui/GameUI.js"></script>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+
+        function log(message) {
+            console.log(message);
+            logsDiv.innerHTML += '<div>' + message + '</div>';
+        }
+
+        function updateStatus(status) {
+            statusDiv.textContent = status;
+            log('STATUS: ' + status);
+        }
+
+        // Test script loading
+        updateStatus('Testing script loading...');
+
+        // Check if kaboom loaded
+        setTimeout(() => {
+            if (typeof kaboom !== 'undefined') {
+                updateStatus('✓ Kaboom.js loaded successfully');
+                log('Kaboom version: ' + (kaboom.version || 'unknown'));
+            } else {
+                updateStatus('✗ Kaboom.js failed to load');
+            }
+        }, 500);
+
+        // Check if game.js loaded
+        setTimeout(() => {
+            if (typeof gameState !== 'undefined') {
+                updateStatus('✓ game.js loaded successfully');
+            } else {
+                updateStatus('✗ game.js failed to load');
+            }
+        }, 1000);
+
+        // Check if GAME_UTILS available
+        setTimeout(() => {
+            if (typeof window.GAME_UTILS !== 'undefined') {
+                updateStatus('✓ GAME_UTILS available');
+            } else {
+                updateStatus('✗ GAME_UTILS not available');
+            }
+        }, 1500);
+
+        // Test LevelGenerator
+        setTimeout(() => {
+            try {
+                const levelGen = new LevelGenerator(1);
+                updateStatus('✓ LevelGenerator works');
+                log('Level created with theme: ' + levelGen.currentTheme);
+            } catch (error) {
+                updateStatus('✗ LevelGenerator failed: ' + error.message);
+                log('LevelGenerator error: ' + error.stack);
+            }
+        }, 2000);
+
+        // Test TrapSystem
+        setTimeout(() => {
+            try {
+                const trapSystem = new TrapSystem(null);
+                updateStatus('✓ TrapSystem works');
+            } catch (error) {
+                updateStatus('✗ TrapSystem failed: ' + error.message);
+                log('TrapSystem error: ' + error.stack);
+            }
+        }, 2500);
+
+        // Test scene creation
+        setTimeout(() => {
+            try {
+                scene('test', () => {
+                    log('Test scene created successfully');
+                });
+                updateStatus('✓ Scene creation works');
+            } catch (error) {
+                updateStatus('✗ Scene creation failed: ' + error.message);
+                log('Scene error: ' + error.stack);
+            }
+        }, 3000);
+
+        // Final status
+        setTimeout(() => {
+            updateStatus('Test complete! Check console for details.');
+        }, 4000);
+    </script>
+
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #status { font-size: 24px; font-weight: bold; margin: 20px 0; }
+        #logs { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+        #logs div { margin: 5px 0; padding: 5px; background: #f5f5f5; }
+    </style>
+</body>
+</html>

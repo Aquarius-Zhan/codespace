@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello, Rogue World!</title>
+
+    <!-- Google Fonts for cyberpunk style -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #00ffff;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            position: relative;
+            border: 2px solid #00ffff;
+            box-shadow:
+                0 0 20px #00ffff,
+                0 0 40px #ff00ff,
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        #gameCanvas {
+            display: block;
+            background: linear-gradient(180deg, #1a0033 0%, #0a0a0a 100%);
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .health-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+            animation: glitch 2s infinite;
+        }
+
+        .score-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            animation: glitch 3s infinite;
+        }
+
+        .letters-display {
+            display: flex;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .letter {
+            color: #ffff00;
+            text-shadow: 0 0 10px #ffff00;
+            opacity: 0.3;
+            transition: all 0.3s;
+        }
+
+        .letter.collected {
+            opacity: 1;
+            animation: pulse 0.5s ease-out;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); text-shadow: 0 0 20px #ffff00; }
+            100% { transform: scale(1); }
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s;
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glitch 1s infinite;
+            margin-bottom: 20px;
+        }
+
+        .binary-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .binary-text {
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ffff;
+            white-space: pre;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+    <div class="binary-bg">
+        <pre class="binary-text">01001000 01100101 01101100 01101100 01101111
+01010111 01101111 01110010 01101100 01100100
+01010010 01101111 01100111 01110101 01100101</pre>
+    </div>
+
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div class="ui-overlay">
+            <div class="health-display">❤️❤️❤️</div>
+            <div class="letters-display">
+                <span class="letter" data-letter="H">H</span>
+                <span class="letter" data-letter="e">e</span>
+                <span class="letter" data-letter="l">l</span>
+                <span class="letter" data-letter="l">l</span>
+                <span class="letter" data-letter="o">o</span>
+            </div>
+            <div class="score-display">SCORE: 0</div>
+        </div>
+
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-text">HELLO, ROGUE WORLD!</div>
+            <div style="color: #00ffff; font-family: monospace;">Initializing chaos...</div>
+        </div>
+    </div>
+
+    <!-- Kaboom.js -->
+    <script src="https://unpkg.com/kaboom@3000.1.0/dist/kaboom.js"></script>
+
+    <!-- Game Scripts -->
+    <script src="src/game.js"></script>
+    <script src="src/scenes/MainScene.js"></script>
+    <script src="src/entities/Player.js"></script>
+    <script src="src/entities/Enemy.js"></script>
+    <script src="src/systems/LevelGenerator.js"></script>
+    <script src="src/systems/TrapSystem.js"></script>
+    <script src="src/ui/GameUI.js"></script>
+
+    <script>
+        // Hide loading screen when game is ready
+        function hideLoadingScreen() {
+            console.log('Game is ready, hiding loading screen...');
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }
+        }
+
+        // Wait for game to be ready, then hide loading screen
+        function waitForGameReady() {
+            console.log('Checking if game is ready...');
+            console.log('kaboom available:', typeof kaboom !== 'undefined');
+            console.log('GAME_UTILS available:', typeof window.GAME_UTILS !== 'undefined');
+
+            // Check if Kaboom is loaded and game is initialized
+            if (typeof kaboom !== 'undefined' && window.GAME_UTILS) {
+                console.log('Game is ready!');
+                hideLoadingScreen();
+            } else {
+                // Not ready yet, check again
+                console.log('Game not ready yet, waiting...');
+                setTimeout(waitForGameReady, 100);
+            }
+        }
+
+        // Also hide loading screen after a maximum timeout as fallback
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen && loadingScreen.style.display !== 'none') {
+                console.log('Fallback timeout reached, hiding loading screen...');
+                hideLoadingScreen();
+            }
+        }, 5000);
+
+        // Start checking after a short delay
+        console.log('Starting to wait for game to be ready...');
+        setTimeout(waitForGameReady, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-icon": "@vant/weapp/icon/index",
+    "van-toast": "@vant/weapp/toast/index"
+  },
+  "navigationBarTitleText": "智能健康助手",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#f5f7fa"
+}

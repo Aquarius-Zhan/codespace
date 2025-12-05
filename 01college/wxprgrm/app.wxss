@@ -1,0 +1,68 @@
+/* 全局样式 - 老年人友好型设计 */
+
+/* 全局变量 */
+:root {
+  /* 深蓝色 - 主要操作 */
+  --primary-color: #1976D2;
+  /* 橙色 - 强调色 */
+  --secondary-color: #FF9800;
+  /* 成功色 */
+  --success-color: #4CAF50;
+  /* 警告色 */
+  --warning-color: #FF5722;
+  /* 错误色 */
+  --error-color: #F44336;
+  /* 主要文字颜色 */
+  --text-primary: #212121;
+  /* 次要文字颜色 */
+  --text-secondary: #757575;
+  /* 边框颜色 */
+  --border-color: #E0E0E0;
+  /* 背景颜色 */
+  --background-primary: #FFFFFF;
+  /* 次要背景色 */
+  --background-secondary: #F5F5F5;
+  /* 阴影颜色 */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 容器样式 */
+.container {
+  padding: 30rpx;
+  background: linear-gradient(135deg, var(--background-secondary) 0%, var(--background-primary) 100%);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 安全区域适配 */
+.safe-area {
+  padding-bottom: constant(safe-area-inset-bottom);
+}
+
+/* 可访问性增强 - 暂时禁用动画 */
+@media (prefers-reduced-motion: reduce) {
+  .no-animation, .no-animation view, .no-animation text, .no-animation image {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #0056b3;
+    --secondary-color: #ff6600;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --border-color: #666666;
+  }
+}
+
+/* 大字体模式支持 */
+@media (min-width: 768rpx) {
+  page {
+    font-size: 18px;
+    line-height: 1.8;
+  }
+}

@@ -1,0 +1,128 @@
+<!--index.wxml-->
+<view class="container">
+  <!-- 顶部欢迎语 -->
+  <view class="header">
+    <view class="welcome-text">
+      <text class="greeting">{{greeting}}</text>
+      <text class="user-name">{{userName}}</text>
+    </view>
+    <view class="date-time">
+      <text class="current-date">{{currentDate}}</text>
+      <text class="current-time">{{currentTime}}</text>
+    </view>
+  </view>
+
+  <!-- 主要功能区域 - 八宫格布局 -->
+  <view class="grid-container">
+    <!-- 上排 - 联系人区域 (4个大格子) -->
+    <view class="grid-row grid-row-large">
+      <block wx:for="{{topContacts}}" wx:key="id">
+        <view class="grid-item grid-item-large" bindtap="navigateToChat" data-contact="{{item}}">
+          <view class="contact-avatar-container">
+            <image class="contact-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+            <!-- 未读消息红点 -->
+            <view class="dot" wx:if="{{item.unreadCount > 0}}"></view>
+          </view>
+          <view class="contact-info">
+            <text class="contact-name">{{item.name}}</text>
+            <text class="contact-relation">{{item.relation}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+
+    <!-- 下排 - 功能区域 (4个小格子) -->
+    <view class="grid-row grid-row-small">
+      <!-- 菜品识别 -->
+      <view class="grid-item grid-item-small" bindtap="navigateToFoodIdentify">
+        <view class="function-icon food-icon">
+          <van-icon name="restaurant-o" size="60rpx" color="#4CAF50"></van-icon>
+        </view>
+        <text class="function-title">菜品</text>
+      </view>
+
+      <!-- 药物识别 -->
+      <view class="grid-item grid-item-small" bindtap="navigateToMedicineIdentify">
+        <view class="function-icon medicine-icon">
+          <van-icon name="bulb-o" size="60rpx" color="#FF9800"></van-icon>
+        </view>
+        <text class="function-title">药物</text>
+      </view>
+
+      <!-- 识别记录 -->
+      <view class="grid-item grid-item-small" bindtap="navigateToRecords">
+        <view class="function-icon record-icon">
+          <van-icon name="bookmark-o" size="60rpx" color="#2196F3"></van-icon>
+        </view>
+        <text class="function-title">记录</text>
+      </view>
+
+      <!-- 闹钟管理 -->
+      <view class="grid-item grid-item-small" bindtap="navigateToAlarms">
+        <view class="function-icon alarm-icon">
+          <van-icon name="clock-o" size="60rpx" color="#F44336"></van-icon>
+        </view>
+        <text class="function-title">闹钟</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速操作区域 -->
+  <view class="quick-actions">
+    <view class="section-title">
+      <text>快捷功能</text>
+    </view>
+    <view class="action-list">
+      <view class="action-item" bindtap="emergencyCall">
+        <view class="action-icon emergency">
+          <van-icon name="phone-o" size="40rpx" color="white"></van-icon>
+        </view>
+        <view class="action-content">
+          <text class="action-title">紧急呼叫</text>
+          <text class="action-desc">快速联系紧急联系人</text>
+        </view>
+      </view>
+
+      <view class="action-item" bindtap="voiceAssistant">
+        <view class="action-icon voice">
+          <van-icon name="volume-o" size="40rpx" color="white"></van-icon>
+        </view>
+        <view class="action-content">
+          <text class="action-title">语音助手</text>
+          <text class="action-desc">语音操作指引</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 健康提醒 -->
+  <view class="health-reminders">
+    <view class="section-title">
+      <text>今日提醒</text>
+    </view>
+    <view class="reminder-list">
+      <block wx:for="{{todayReminders}}" wx:key="id">
+        <view class="reminder-item {{item.type}}">
+          <view class="reminder-icon">
+            <van-icon name="{{item.icon}}" size="32rpx" color="{{item.color}}"></van-icon>
+          </view>
+          <view class="reminder-content">
+            <text class="reminder-title">{{item.title}}</text>
+            <text class="reminder-time">{{item.time}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 底部安全区域 -->
+  <view class="safe-area"></view>
+</view>
+
+<!-- 语音提示组件 -->
+<view class="voice-hint" wx:if="{{showVoiceHint}}" bindtap="hideVoiceHint">
+  <view class="voice-hint-content">
+    <van-icon name="volume-o" size="48rpx" color="#1976D2"></van-icon>
+    <text>点击可收听语音提示</text>
+  </view>
+</view>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test - Hello, Rogue World!</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            color: #00ffff;
+            font-family: 'Share Tech Mono', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #gameCanvas {
+            display: block;
+            border: 2px solid #00ffff;
+            background: linear-gradient(180deg, #1a0033 0%, #0a0a0a 100%);
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glitch 1s infinite;
+        }
+
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 300px;
+        }
+
+        .debug-item {
+            margin: 5px 0;
+        }
+
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .warning { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-text">HELLO, ROGUE WORLD!</div>
+        <div style="color: #00ffff; font-family: monospace;">Simple test version...</div>
+    </div>
+
+    <div class="debug-info" id="debugInfo">
+        <div class="debug-item">Initializing...</div>
+    </div>
+
+    <!-- Kaboom.js -->
+    <script src="https://unpkg.com/kaboom@3000.1.0/dist/kaboom.js"></script>
+
+    <script>
+        // Simple debug function
+        function debug(message, type = 'info') {
+            const debugInfo = document.getElementById('debugInfo');
+            const div = document.createElement('div');
+            div.className = 'debug-item ' + type;
+            div.textContent = message;
+            debugInfo.appendChild(div);
+            console.log(message);
+
+            // Auto-scroll
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+        }
+
+        debug('Starting simple test...');
+
+        // Test Kaboom
+        setTimeout(() => {
+            if (typeof kaboom !== 'undefined') {
+                debug('✓ Kaboom.js loaded successfully', 'success');
+                initSimpleGame();
+            } else {
+                debug('✗ Kaboom.js failed to load', 'error');
+                hideLoadingScreen();
+            }
+        }, 1000);
+
+        function initSimpleGame() {
+            debug('Initializing Kaboom...');
+
+            try {
+                // Initialize Kaboom with minimal settings
+                const k = kaboom({
+                    width: 800,
+                    height: 600,
+                    canvas: document.getElementById('gameCanvas'),
+                    background: [10, 0, 20],
+                    gravity: 1600,
+                    debug: false
+                });
+
+                debug('✓ Kaboom initialized successfully', 'success');
+                debug('Creating GAME_UTILS object...', 'warning');
+
+                // Create simple GAME_UTILS
+                window.GAME_UTILS = {
+                    score: 0,
+                    debug: debug
+                };
+
+                debug('✓ GAME_UTILS created', 'success');
+                debug('Starting game scene...', 'warning');
+
+                // Create simple scene
+                scene('game', () => {
+                    debug('✓ Game scene created', 'success');
+
+                    // Add ground
+                    const ground = add([
+                        rect(800, 100),
+                        pos(0, 500),
+                        color(0, 255, 255),
+                        body({ isStatic: true }),
+                        'ground'
+                    ]);
+
+                    // Add player
+                    const player = add([
+                        rect(32, 32),
+                        pos(100, 300),
+                        color(255, 255, 0),
+                        body(),
+                        'player'
+                    ]);
+
+                    // Simple controls
+                    onKeyDown('left', () => {
+                        player.move(-200, 0);
+                    });
+
+                    onKeyDown('right', () => {
+                        player.move(200, 0);
+                    });
+
+                    onKeyPress('space', () => {
+                        if (player.isGrounded()) {
+                            player.jump();
+                        }
+                    });
+
+                    // Ground collision
+                    player.onGround(() => {
+                        debug('Player is grounded');
+                    });
+
+                    debug('✓ Player and controls created', 'success');
+                });
+
+                // Start game
+                scene('game');
+                debug('✓ Game started!', 'success');
+                hideLoadingScreen();
+
+            } catch (error) {
+                debug('✗ Error initializing game: ' + error.message, 'error');
+                debug('Stack: ' + error.stack, 'error');
+                hideLoadingScreen();
+            }
+        }
+
+        function hideLoadingScreen() {
+            debug('Hiding loading screen...', 'warning');
+            const loadingScreen = document.getElementById('loadingScreen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!--food-identify.wxml-->
+<view class="container">
+  <!-- 顶部说明 -->
+  <view class="header-info">
+    <view class="info-title">
+      <van-icon name="restaurant-o" size="48rpx" color="#4CAF50"></van-icon>
+      <text>菜品识别</text>
+    </view>
+    <text class="info-desc">拍摄或上传菜品照片，智能识别营养成分和建议</text>
+  </view>
+
+  <!-- 主要操作区域 -->
+  <view class="main-content">
+    <!-- 图片预览区域 -->
+    <view class="image-preview" wx:if="{{imagePreview}}">
+      <image class="preview-image" src="{{imagePreview}}" mode="aspectFit"></image>
+      <view class="preview-actions">
+        <view class="action-btn" bindtap="retakePhoto">
+          <van-icon name="replay" size="40rpx" color="#1976D2"></van-icon>
+          <text>重拍</text>
+        </view>
+        <view class="action-btn" bindtap="chooseNewImage">
+          <van-icon name="photo-o" size="40rpx" color="#FF9800"></van-icon>
+          <text>换一张</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 拍照/上传区域 -->
+    <view class="capture-area" wx:else>
+      <view class="capture-placeholder" bindtap="takePhoto">
+        <van-icon name="photograph" size="120rpx" color="#4CAF50"></van-icon>
+        <text class="capture-text">点击拍照</text>
+        <text class="capture-tips">或从相册选择图片</text>
+      </view>
+
+      <!-- 快速操作按钮 -->
+      <view class="quick-actions">
+        <view class="quick-btn" bindtap="takePhoto">
+          <van-icon name="camera-o" size="48rpx" color="#4CAF50"></van-icon>
+          <text>拍照</text>
+        </view>
+        <view class="quick-btn" bindtap="chooseImage">
+          <van-icon name="photo-o" size="48rpx" color="#FF9800"></van-icon>
+          <text>相册</text>
+        </view>
+        <view class="quick-btn" bindtap="toggleFlash">
+          <van-icon name="flashlight" size="48rpx" color="{{flashOn ? '#F44336' : '#999'}}"></van-icon>
+          <text>{{flashOn ? '关闭闪光' : '开启闪光'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 识别结果区域 -->
+    <view class="recognition-result" wx:if="{{recognitionResult}}">
+      <view class="result-header">
+        <text class="result-title">识别结果</text>
+        <view class="confidence-score">
+          <text>置信度: {{recognitionResult.confidence}}%</text>
+          <view class="confidence-bar">
+            <view class="confidence-fill" style="width: {{recognitionResult.confidence}}%"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 菜品信息 -->
+      <view class="dish-info">
+        <view class="dish-name">
+          <van-icon name="star" size="32rpx" color="#FF9800"></van-icon>
+          <text>{{recognitionResult.dishName}}</text>
+        </view>
+        <text class="dish-desc">{{recognitionResult.description}}</text>
+      </view>
+
+      <!-- 营养信息 -->
+      <view class="nutrition-info">
+        <view class="nutrition-title">
+          <van-icon name="heart-o" size="32rpx" color="#F44336"></van-icon>
+          <text>营养成分 (每100g)</text>
+        </view>
+
+        <view class="nutrition-grid">
+          <view class="nutrition-item">
+            <view class="nutrition-icon">
+              <van-icon name="fire" size="32rpx" color="#FF5722"></van-icon>
+            </view>
+            <view class="nutrition-data">
+              <text class="nutrition-value">{{recognitionResult.nutrition.calories}}</text>
+              <text class="nutrition-unit">千卡</text>
+            </view>
+            <text class="nutrition-label">热量</text>
+          </view>
+
+          <view class="nutrition-item">
+            <view class="nutrition-icon">
+              <van-icon name="protein" size="32rpx" color="#2196F3"></van-icon>
+            </view>
+            <view class="nutrition-data">
+              <text class="nutrition-value">{{recognitionResult.nutrition.protein}}</text>
+              <text class="nutrition-unit">g</text>
+            </view>
+            <text class="nutrition-label">蛋白质</text>
+          </view>
+
+          <view class="nutrition-item">
+            <view class="nutrition-icon">
+              <van-icon name="grain" size="32rpx" color="#FFC107"></van-icon>
+            </view>
+            <view class="nutrition-data">
+              <text class="nutrition-value">{{recognitionResult.nutrition.carbs}}</text>
+              <text class="nutrition-unit">g</text>
+            </view>
+            <text class="nutrition-label">碳水</text>
+          </view>
+
+          <view class="nutrition-item">
+            <view class="nutrition-icon">
+              <van-icon name="water" size="32rpx" color="#00BCD4"></van-icon>
+            </view>
+            <view class="nutrition-data">
+              <text class="nutrition-value">{{recognitionResult.nutrition.fat}}</text>
+              <text class="nutrition-unit">g</text>
+            </view>
+            <text class="nutrition-label">脂肪</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 健康建议 -->
+      <view class="health-suggestions">
+        <view class="suggestions-title">
+          <van-icon name="bulb-o" size="32rpx" color="#4CAF50"></van-icon>
+          <text>健康建议</text>
+        </view>
+        <view class="suggestions-list">
+          <view class="suggestion-item" wx:for="{{recognitionResult.suggestions}}" wx:key="index">
+            <view class="suggestion-number">{{index + 1}}</view>
+            <text class="suggestion-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 过敏提醒 -->
+      <view class="allergy-alert" wx:if="{{recognitionResult.allergens.length > 0}}">
+        <view class="alert-title">
+          <van-icon name="warning" size="32rpx" color="#F44336"></van-icon>
+          <text>过敏原提醒</text>
+        </view>
+        <view class="allergen-tags">
+          <van-tag
+            wx:for="{{recognitionResult.allergens}}"
+            wx:key="*this"
+            type="danger"
+            size="large"
+            custom-class="allergen-tag"
+          >{{item}}</van-tag>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="result-actions">
+        <van-button
+          type="primary"
+          size="large"
+          bind:click="saveRecord"
+          loading="{{saving}}"
+          custom-class="action-button"
+        >
+          <van-icon name="bookmark-o" size="40rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+          保存记录
+        </van-button>
+
+        <van-button
+          type="default"
+          size="large"
+          bind:click="shareResult"
+          custom-class="action-button secondary"
+        >
+          <van-icon name="share-o" size="40rpx" color="#1976D2" style="margin-right: 16rpx;"></van-icon>
+          分享结果
+        </van-button>
+
+        <van-button
+          type="warning"
+          size="large"
+          bind:click="identifyAgain"
+          custom-class="action-button"
+        >
+          <van-icon name="replay" size="40rpx" color="white" style="margin-right: 16rpx;"></van-icon>
+          重新识别
+        </van-button>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="loading-state" wx:if="{{identifying}}">
+      <view class="loading-content">
+        <van-loading type="spinner" size="80rpx" color="#4CAF50"></van-loading>
+        <text class="loading-text">正在识别菜品...</text>
+        <text class="loading-tips">这可能需要几秒钟</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录快捷入口 -->
+  <view class="history-entrance" wx:if="{{!recognitionResult && !imagePreview}}">
+    <view class="entrance-header">
+      <text>最近识别</text>
+      <text class="view-all" bindtap="viewAllHistory">查看全部</text>
+    </view>
+    <scroll-view class="history-list" scroll-x="true" show-scrollbar="false">
+      <view
+        class="history-item"
+        wx:for="{{recentHistory}}"
+        wx:key="id"
+        bindtap="loadHistoryItem"
+        data-item="{{item}}"
+      >
+        <image class="history-image" src="{{item.image}}" mode="aspectFill"></image>
+        <text class="history-name">{{item.dishName}}</text>
+        <text class="history-time">{{item.time}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 使用提示 -->
+  <view class="usage-tips" wx:if="{{!imagePreview && !recognitionResult}}">
+    <view class="tips-title">
+      <van-icon name="info-o" size="32rpx" color="#2196F3"></van-icon>
+      <text>使用提示</text>
+    </view>
+    <view class="tips-list">
+      <view class="tip-item">
+        <van-icon name="check" size="24rpx" color="#4CAF50"></van-icon>
+        <text>确保菜品光线充足，图像清晰</text>
+      </view>
+      <view class="tip-item">
+        <van-icon name="check" size="24rpx" color="#4CAF50"></van-icon>
+        <text>尽量拍摄完整的菜品，避免遮挡</text>
+      </view>
+      <view class="tip-item">
+        <van-icon name="check" size="24rpx" color="#4CAF50"></van-icon>
+        <text>建议从上方45度角拍摄效果最佳</text>
+      </view>
+      <view class="tip-item">
+        <van-icon name="check" size="24rpx" color="#4CAF50"></van-icon>
+        <text>识别结果仅供参考，具体请咨询营养师</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 语音输入按钮（浮动） -->
+<view class="voice-input-btn" bindtap="startVoiceInput">
+  <van-icon name="volume-o" size="48rpx" color="white"></van-icon>
+</view>
