@@ -3,7 +3,11 @@
     "allow": [
       "Bash(python:*)",
       "Bash(curl:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(gcc:*)",
+      "Bash(./3.exe)",
+      "Bash(dir:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []
