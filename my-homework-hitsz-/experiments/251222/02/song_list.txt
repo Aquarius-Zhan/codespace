@@ -1,0 +1,3 @@
+Canon,Pachelbel,musics/Canon.mp3
+ForElise,Beethoven,musics/ForElise.mp3
+FlowerDance,DJOKAWARI,musics/FlowerDance.mp3

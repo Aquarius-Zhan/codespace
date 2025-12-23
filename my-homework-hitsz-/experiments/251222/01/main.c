@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // 歌曲节点结构体
 typedef struct Song {
@@ -293,6 +294,30 @@ int export_playlist(PlaylistManager* manager, const char* filename) {
 
 // 6. 随机播放歌曲（非必做）
 int play_song_random(PlaylistManager* manager) {
+    srand((unsigned)time(NULL));
+
+    int min = 5;
+    int max = 50;
+    int count = rand() % (max - min + 1) + min;
+
+    if (manager->head == NULL)
+    {
+        printf("当前列表中没有歌曲\n");
+    }
+    else
+    {
+        Song *curr = manager->current;
+        for (int i = 0; i < count; i ++)
+        {
+            if (curr->next == NULL)
+            {
+                curr = manager->head;
+                continue;
+            }
+            curr = curr->next;
+        }
+    }
+    return 0;
 
     return 0;
 }
