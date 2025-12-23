@@ -1,0 +1,2 @@
+Canon,Pachelbel,musics/Canon.mp3
+FlowerDance,DJ_OKAWARI,musics/FlowerDance.mp3
